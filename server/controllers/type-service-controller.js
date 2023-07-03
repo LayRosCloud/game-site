@@ -18,7 +18,7 @@ class TypeServiceController {
     async create(req, res, next){
         const {name} = req.body
         if(!name){
-            return next(ApiError.badRequest('Ошибка! Неправильное тело запроса!'))
+            return next(ApiError.internal('Ошибка! Неправильное тело запроса!'))
         }
         try{
             return res.json(await service.create(name))
@@ -32,8 +32,9 @@ class TypeServiceController {
         const {name} = req.body
         const {id} = req.params
         if(!name){
-            return next(ApiError.badRequest('Ошибка! Неправильное тело запроса!'))
+            return next(ApiError.internal('Ошибка! Неправильное тело запроса!'))
         }
+        
         try{
             return res.json(await service.update(id, name))
         }

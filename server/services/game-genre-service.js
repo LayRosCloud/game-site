@@ -17,7 +17,8 @@ class GameGenreService{
 
     async update(id, gameId, genreId){
         await this.get(id)
-        return await GameGenreEntity.update({gameId, genreId}, {where: {id}});
+        await GameGenreEntity.update({gameId, genreId}, {where: {id}});
+        return await this.get(id);
     }
 
     async delete(id){

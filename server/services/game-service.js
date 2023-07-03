@@ -17,7 +17,8 @@ class GameService{
 
     async update(id, title, description, developer, publisher, urlDownload, typeReleaseId){
         await this.get(id)
-        return await GameEntity.update({title, description, developer, publisher, urlDownload, typeReleaseId}, {where: {id}});
+        await GameEntity.update({title, description, developer, publisher, urlDownload, typeReleaseId}, {where: {id}});
+        return await this.get(id);
     }
 
     async delete(id){

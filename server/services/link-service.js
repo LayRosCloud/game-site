@@ -17,7 +17,8 @@ class LinkService{
 
     async update(id, url, gameId, typeServiceId){
         await this.get(id)
-        return await LinkEntity.update({url, gameId, typeServiceId}, {where: {id}});
+        await LinkEntity.update({url, gameId, typeServiceId}, {where: {id}});
+        return await this.get(id);
     }
 
     async delete(id){

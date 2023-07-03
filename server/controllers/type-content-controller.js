@@ -1,5 +1,7 @@
 const service = require('../services/type-content-service')
 const ApiError = require('../error/api-error')
+const uuid = require("uuid");
+const path = require("path");
 class TypeContentController{
     async getAll(req, res){
         return res.json(await service.getAll())
@@ -16,6 +18,11 @@ class TypeContentController{
     }
     async create(req, res, next){
         const {name} = req.body
+        const content = uuid.v4() + ".jpg"
+        const {image} = req.files
+        console.log(image)
+        image.mv(path.resolve(__dirname, '..', 'static', content));
+
         if(!name){
             return next(ApiError.badRequest('Ошибка! Неправильное тело запроса!'))
         }

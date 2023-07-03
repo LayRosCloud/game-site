@@ -17,7 +17,8 @@ class PreviewService{
 
     async update(id, url, gameId, typeContentId){
         await this.get(id)
-        return await PreviewEntity.update({url, gameId, typeContentId}, {where: {id}});
+        await PreviewEntity.update({url, gameId, typeContentId}, {where: {id}});
+        return await this.get(id);
     }
 
     async delete(id){

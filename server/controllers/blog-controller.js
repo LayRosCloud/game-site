@@ -1,5 +1,6 @@
 const service = require('../services/blog-service')
 const ApiError = require('../error/api-error')
+
 class BlogController{
     async getAll(req, res){
         return res.json(await service.getAll())
@@ -14,8 +15,12 @@ class BlogController{
             return next(ApiError.badRequest(e.message))
         }
     }
+
     async create(req, res, next){
-        const {gameId, typeBlogId} = req.body
+        const {gameId, typeBlogId} = req.body;
+        if(gameId || typeBlogId){
+            return next(ApiError.badBody())
+        }
         try{
             return res.json(await service.create(gameId, typeBlogId))
         }
@@ -27,6 +32,10 @@ class BlogController{
     async update(req, res, next){
         const {gameId, typeBlogId} = req.body
         const {id} = req.params
+        if(!gameId || typeBlogId){
+            return next(ApiError.badBody())
+        }
+
         try{
             return res.json(await service.update(id, gameId, typeBlogId))
         }
@@ -34,6 +43,7 @@ class BlogController{
             return next(ApiError.badRequest(e.message))
         }
     }
+
     async delete(req, res, next){
         const {id} = req.params
         try{

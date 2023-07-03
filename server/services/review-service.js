@@ -21,7 +21,8 @@ class ReviewService{
 
     async update(id, url, gameId, commentId){
         await this.get(id)
-        return await ReviewEntity.update({title, rating, commentId}, {where: {id}});
+        await ReviewEntity.update({title, rating, commentId}, {where: {id}});
+        return await this.get(id);
     }
 
     async delete(id){

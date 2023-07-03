@@ -5,13 +5,19 @@ const PORT = process.env.PORT || 5000;
 const models = require('./core/models');
 const sequelize = require('./core/database');
 const router = require('./routes');
+const fileUpload = require('express-fileupload')
 const errorHandling = require('./middleware/error-handling')
+const path = require('path')
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use(fileUpload({}));
+
 app.use(process.env.URL_START_POINT, router);
+app.use(express.static(path.resolve(__dirname, 'static')))
+
 
 app.use(errorHandling);
 const start = async () => {

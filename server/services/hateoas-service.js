@@ -4,7 +4,6 @@ class HateoasService{
             {
                 rel: 'hrefs',
                 href: `${process.env.URL_START_POINT}/`,
-                methods: 'GET'
             }
         ]
         add(process.env.URL_BLOGS);
@@ -26,12 +25,11 @@ class HateoasService{
         add(`${process.env.URL_USERS}/${process.env.URL_USERS_REFRESH}`);
         add(process.env.URL_ROLES);
 
-        function add(name, version = process.env.URL_VERSION, methods = 'GET'){
+        function add(name, version = process.env.URL_VERSION){
             list.push(
                 {
                     rel: name.replace('/', '-'),
                     href: `${process.env.URL_START_POINT}${version}${name}/`,
-                    methods
                 }
             );
         }

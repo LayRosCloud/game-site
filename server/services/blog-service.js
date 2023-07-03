@@ -17,7 +17,8 @@ class BlogService{
 
     async update(id, gameId, typeBlogId){
         await this.get(id)
-        return await BlogEntity.update({gameId, typeBlogId}, {where: {id}});
+        await BlogEntity.update({gameId, typeBlogId}, {where: {id}})
+        return await this.get(id);
     }
 
     async delete(id){

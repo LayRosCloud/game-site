@@ -15,5 +15,8 @@ class ApiError extends Error{
     static forbidden(message){
         return new ApiError(403, message)
     }
+    static badBody(){
+        return new ApiError(400, 'Ошибка тела запроса')
+    }
 }
 module.exports = ApiError

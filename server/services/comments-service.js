@@ -1,4 +1,4 @@
-const {CommentEntity} = require('../core/models')
+const {CommentEntity, BlogEntity} = require('../core/models')
 class CommentsService{
     async getAll(){
         return await CommentEntity.findAll();
@@ -12,12 +12,13 @@ class CommentsService{
     }
 
     async create(date, content, gameId, userId){
-        return await CommentEntity.create({date, content, isModerated, gameId,userId});
+        return await CommentEntity.create({date, content, gameId,userId});
     }
 
-    async update(id, content, isModerated, gameId,userId){
+    async update(id, content, isModerated, gameId, userId){
         await this.get(id)
-        return await CommentEntity.update({content, isModerated, gameId, userId}, {where: {id}});
+        await CommentEntity.update({content, isModerated, gameId, userId}, {where: {id}})
+        return await this.get(id);
     }
 
     async delete(id){
