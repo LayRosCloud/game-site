@@ -15,9 +15,6 @@ class ReviewService{
         const response = await CommentService.create(date, content, gameId, userId)
         return await ReviewEntity.create({title, rating});
     }
-    async makeReview(title, rating, commentId){
-        return await ReviewEntity.create({title, rating, commentId});
-    }
 
     async update(id, url, gameId, commentId){
         await this.get(id)

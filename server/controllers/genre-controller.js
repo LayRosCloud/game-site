@@ -15,9 +15,12 @@ class GenreController{
         }
     }
     async create(req, res, next){
-        const {gameId, typeBlogId} = req.body
+        const {name} = req.body
+        if(!name){
+            return next(ApiError.badBody())
+        }
         try{
-            return res.json(await service.create(gameId, typeBlogId))
+            return res.json(await service.create(name))
         }
         catch (e){
             return next(ApiError.badRequest(e.message))
@@ -25,10 +28,13 @@ class GenreController{
     }
 
     async update(req, res, next){
-        const {gameId, typeBlogId} = req.body
+        const {name} = req.body
         const {id} = req.params
+        if(!name){
+            return next(ApiError.badBody())
+        }
         try{
-            return res.json(await service.update(id, gameId, typeBlogId))
+            return res.json(await service.update(id, name))
         }
         catch (e){
             return next(ApiError.badRequest(e.message))

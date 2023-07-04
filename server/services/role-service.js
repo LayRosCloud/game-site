@@ -16,10 +16,9 @@ class RoleService{
     }
 
     async update(id, name){
-        let response = await this.get(id)
+        await this.get(id)
         await RoleEntity.update({name}, {where: {id}})
-        response = await this.get(id)
-        return response;
+        return await this.get(id);
     }
 
     async delete(id){

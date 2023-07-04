@@ -14,10 +14,14 @@ class RoleController{
             return next(ApiError.badRequest(e.message))
         }
     }
+
     async create(req, res, next){
-        const {gameId, typeBlogId} = req.body
+        const {name} = req.body
+        if(!name){
+            return next(ApiError.badRequest());
+        }
         try{
-            return res.json(await service.create(gameId, typeBlogId))
+            return res.json(await service.create(name))
         }
         catch (e){
             return next(ApiError.badRequest(e.message))
@@ -25,15 +29,20 @@ class RoleController{
     }
 
     async update(req, res, next){
-        const {gameId, typeBlogId} = req.body
+        const {name} = req.body
         const {id} = req.params
+
+        if(!name){
+            return next(ApiError.badRequest());
+        }
         try{
-            return res.json(await service.update(id, gameId, typeBlogId))
+            return res.json(await service.update(id, name))
         }
         catch (e){
             return next(ApiError.badRequest(e.message))
         }
     }
+
     async delete(req, res, next){
         const {id} = req.params
         try{

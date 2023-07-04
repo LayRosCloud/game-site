@@ -5,5 +5,5 @@ module.exports = function (err, req, res, next){
             .json({status: err.status, message: err.message});
     }
 
-    return res.status(500).json({status: 500, message: "Необработанная ошибка на севрере! "})
+    return res.status(500).json({status: 500, message: err.message})
 }

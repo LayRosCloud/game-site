@@ -1,6 +1,7 @@
 const service = require('../services/game-service')
 const ApiError = require('../error/api-error')
 const uuid = require('uuid')
+const path = require('path')
 class GameController{
     async getAll(req, res){
         return res.json(await service.getAll())
@@ -16,7 +17,14 @@ class GameController{
         }
     }
     async create(req, res, next){
-        const {title, description, developer, publisher, urlDownload, typeReleaseId} = req.body
+        const {title, description, developer, publisher, typeReleaseId} = req.body
+        const { sourceFile } = req.files
+        if(!title || !description|| !developer|| !publisher|| !typeReleaseId){
+            return next(ApiError.badBody())
+        }
+        const urlDownload = uuid.v4() + '.zip';
+        await sourceFile.mv(path.resolve(__dirname, '..', 'static', urlDownload))
+
         try{
             return res.json(await service.create(title, description, developer, publisher, urlDownload, typeReleaseId))
         }
@@ -26,10 +34,17 @@ class GameController{
     }
 
     async update(req, res, next){
-        const {title, description, developer, publisher, typeReleaseId} = req.body
+        let {title, description, developer, urlDownload, publisher, typeReleaseId} = req.body
+        if(!title || !description|| !developer|| !urlDownload || !publisher|| !typeReleaseId){
+            return next(ApiError.badBody())
+        }
 
         const { sourceFile } = req.files
-        const urlDownload = uuid.v4();
+
+        if(sourceFile){
+            urlDownload = uuid.v4() + '.zip';
+            await sourceFile.mv(path.resolve(__dirname, '..', 'static', urlDownload))
+        }
 
         const {id} = req.params
         try{

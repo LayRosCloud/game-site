@@ -15,9 +15,12 @@ class PreviewController{
         }
     }
     async create(req, res, next){
-        const {gameId, typeBlogId} = req.body
+        const {url, gameId, typeContentId} = req.body
+        if(!url || gameId || typeContentId){
+            return next(ApiError.badBody())
+        }
         try{
-            return res.json(await service.create(gameId, typeBlogId))
+            return res.json(await service.create(url, gameId, typeContentId))
         }
         catch (e){
             return next(ApiError.badRequest(e.message))
@@ -25,10 +28,13 @@ class PreviewController{
     }
 
     async update(req, res, next){
-        const {gameId, typeBlogId} = req.body
+        const {url, gameId, typeContentId} = req.body
         const {id} = req.params
+        if(!url || gameId || typeContentId){
+            return next(ApiError.badBody())
+        }
         try{
-            return res.json(await service.update(id, gameId, typeBlogId))
+            return res.json(await service.update(id, url, gameId, typeContentId))
         }
         catch (e){
             return next(ApiError.badRequest(e.message))

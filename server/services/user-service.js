@@ -1,23 +1,38 @@
-const {UserEntity} = require('../core/models')
+const {UserEntity, RoleEntity} = require('../core/models')
+const UserDto = require('../core/dto/UserDto')
 const uuid = require('uuid')
+const tokenService = require('./token-service')
 class UserService{
     async getAll(){
-        return await UserEntity.findAll();
-    }
-
-    async get(id){
-        const response = await UserEntity.findOne({where: {id}})
-        if(!response){
-            throw new Error('Ошибка! Объект не найден!')
-        }
+        const results = await UserEntity.findAll({include: RoleEntity})
+        const response = [];
+        results.map(result => {
+            response.push(new UserDto(result))
+        })
         return response;
     }
 
-    async create(login, email, password, avatarImage, roleId){
+    async get(id){
+        const response = await UserEntity.findOne({where: {id}, include: RoleEntity})
+        if(!response){
+            throw new Error('Ошибка! Объект не найден!')
+        }
+        return new UserDto(response);
+    }
+
+    async create(login, email, password, avatarImage, roleId, identityItem){
         roleId = roleId || 1;
         avatarImage = avatarImage || null;
         const activationLink = uuid.v4();
-        return await UserEntity.create({login, email, password, activationLink, avatarImage, roleId});
+        const check = await UserEntity.findOne({where: {email}})
+        if(check){
+            throw new Error("Ошибка! Такой Email существует!")
+        }
+
+        const result = await UserEntity.create({login, email, password, activationLink, avatarImage, roleId});
+        const tokens = await tokenService.generateTokens(result, identityItem)
+        const dto = new UserDto(result);
+        return {...dto, ...tokens};
     }
 
     async update(id, login, email, password, avatarImage, isBanned, roleId){

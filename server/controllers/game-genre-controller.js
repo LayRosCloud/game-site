@@ -15,9 +15,12 @@ class GameGenreController{
         }
     }
     async create(req, res, next){
-        const {gameId, typeBlogId} = req.body
+        const {gameId, genreId} = req.body
+        if(!gameId || genreId){
+            return next(ApiError.badBody())
+        }
         try{
-            return res.json(await service.create(gameId, typeBlogId))
+            return res.json(await service.create(gameId, genreId))
         }
         catch (e){
             return next(ApiError.badRequest(e.message))
@@ -25,10 +28,14 @@ class GameGenreController{
     }
 
     async update(req, res, next){
-        const {gameId, typeBlogId} = req.body
+        const {gameId, genreId} = req.body
         const {id} = req.params
+        if(!gameId || genreId){
+            return next(ApiError.badBody())
+        }
+
         try{
-            return res.json(await service.update(id, gameId, typeBlogId))
+            return res.json(await service.update(id, gameId, genreId))
         }
         catch (e){
             return next(ApiError.badRequest(e.message))

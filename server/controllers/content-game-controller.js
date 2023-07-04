@@ -16,15 +16,20 @@ class GameContentController{
             return next(ApiError.badRequest(e.message))
         }
     }
+
     async create(req, res, next){
         let {content, order, blogId} = req.body
-        const {img} = req.files;
+        const {image} = req.files;
         let typeContentId = 1;
-        if(img){
+        if(!order || !blogId){
+            return next(ApiError.badBody())
+        }
+        if(image){
             content = uuid.v4() + ".jpg"
-            await img.mv(path.resolve(__dirname, '..', 'static', content));
+            await image.mv(path.resolve(__dirname, '..', 'static', content));
             typeContentId = 2;
         }
+
         try{
             return res.json(await service.create(content, order, blogId, typeContentId))
         }

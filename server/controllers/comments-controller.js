@@ -15,7 +15,7 @@ class CommentsController{
         }
     }
     async create(req, res, next){
-        const {content, isModerated, gameId, userId} = req.body
+        const {content, gameId, userId} = req.body
         try{
             return res.json(await service.create(content,gameId,userId))
         }
@@ -24,11 +24,27 @@ class CommentsController{
         }
     }
 
-    async update(req, res, next){
-        const {gameId, typeBlogId} = req.body
-        const {id} = req.params
+    async makeReview(req, res, next){
+        const {title, rating, commentId} = req.body;
+
+        if(!title || !rating || !commentId){
+            return next(ApiError.badBody())
+        }
+
         try{
-            return res.json(await service.update(id, gameId, typeBlogId))
+            const response = await service.makeReview(title, rating, commentId);
+        }catch (e){
+            return next(ApiError.badRequest(e))
+        }
+    }
+
+    async update(req, res, next){
+        const {content, isModerated, gameId, userId} = req.body
+
+        const {id} = req.params
+
+        try{
+            return res.json(await service.update(id, content, isModerated, gameId, userId))
         }
         catch (e){
             return next(ApiError.badRequest(e.message))
@@ -36,6 +52,7 @@ class CommentsController{
     }
     async delete(req, res, next){
         const {id} = req.params
+
         try{
             return res.json(await service.delete(id))
         }
