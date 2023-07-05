@@ -3,6 +3,7 @@ const router = new Router();
 const controller = require('../controllers/user-controller')
 const { body } = require('express-validator')
 
+
 router.get('/', controller.getAll)
 
 //Все что связано с регистрацией
