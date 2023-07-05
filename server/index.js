@@ -8,12 +8,14 @@ const router = require('./routes');
 const fileUpload = require('express-fileupload')
 const errorHandling = require('./middleware/error-handling')
 const path = require('path')
+const cookieParser = require('cookie-parser')
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 app.use(fileUpload({}));
+app.use(cookieParser())
 
 app.use(process.env.URL_START_POINT, router);
 app.use(express.static(path.resolve(__dirname, 'static')))
@@ -30,4 +32,8 @@ const start = async () => {
     }
 }
 
-start()
+start();
+
+setInterval(async ()=>{
+    await sequelize.query("DELETE FROM `tokens` WHERE DATE_SUB(`createdAt`, INTERVAL 30 DAY)  < NOW()")
+}, 1000 * 60 * 60 * 24 )

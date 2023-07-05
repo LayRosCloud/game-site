@@ -23,9 +23,11 @@ const typeServiceRouter = require('./type-service-router')
 const typeBlogRouter = require('./type-blog-router')
 const typeReleaseRouter = require('./type-release-router')
 
+const authMiddleware = require('../middleware/auth-middleware')
+
+
 router.use('/', hateoas)
 router.use(`${process.env.URL_VERSION}${process.env.URL_BLOGS}`, blogRouter)
-router.use(`${process.env.URL_VERSION}${process.env.URL_TYPE_BLOGS}`, typeBlogRouter)
 router.use(`${process.env.URL_VERSION}${process.env.URL_COMMENTS}`, commentsRouter)
 router.use(`${process.env.URL_VERSION}${process.env.URL_CONTENT_GAMES}`, contentGameRouter)
 router.use(`${process.env.URL_VERSION}${process.env.URL_GAMES_GENRE}`, gameGenreRouter)
@@ -33,11 +35,13 @@ router.use(`${process.env.URL_VERSION}${process.env.URL_GENRES}`, genreRouter)
 router.use(`${process.env.URL_VERSION}${process.env.URL_LINKS}`, linkRouter)
 router.use(`${process.env.URL_VERSION}${process.env.URL_PREVIEWS}`, previewRouter)
 router.use(`${process.env.URL_VERSION}${process.env.URL_REVIEWS}`, reviewRouter)
-router.use(`${process.env.URL_VERSION}${process.env.URL_ROLES}`, roleRouter)
-router.use(`${process.env.URL_VERSION}${process.env.URL_TYPE_SERVICES}`, typeServiceRouter)
+router.use(`${process.env.URL_VERSION}${process.env.URL_ROLES}`,authMiddleware, roleRouter)
 router.use(`${process.env.URL_VERSION}${process.env.URL_USERS}`, userRouter)
 router.use(`${process.env.URL_VERSION}${process.env.URL_GAMES}`, gameRouter)
-router.use(`${process.env.URL_VERSION}${process.env.URL_TYPE_CONTENTS}`, typeContentRouter)
-router.use(`${process.env.URL_VERSION}${process.env.URL_TYPE_RELEASES}`, typeReleaseRouter)
+
+router.use(`${process.env.URL_VERSION}${process.env.URL_TYPE_BLOGS}`, authMiddleware, typeBlogRouter)
+router.use(`${process.env.URL_VERSION}${process.env.URL_TYPE_SERVICES}`, authMiddleware, typeServiceRouter)
+router.use(`${process.env.URL_VERSION}${process.env.URL_TYPE_CONTENTS}`, authMiddleware, typeContentRouter)
+router.use(`${process.env.URL_VERSION}${process.env.URL_TYPE_RELEASES}`, authMiddleware, typeReleaseRouter)
 
 module.exports = router;
