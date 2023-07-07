@@ -1,29 +1,35 @@
 const {CommentEntity, ReviewEntity,GameEntity,UserEntity} = require('../core/models')
 const CommentDto = require('../core/dto/CommentDto')
 class CommentsService{
-    async getAll(){
-        const results = await CommentEntity.findAll({include: [GameEntity, UserEntity]});
+    async getAll(gameId, limit, page){
+        limit = limit || 9
+        page = page || 1
+
+        let offset = page * limit - limit
+        let results = []
+        if(gameId){
+            results = await CommentEntity.findAndCountAll({include: [GameEntity, UserEntity], where: {gameId}, limit, offset});
+        }
+        else{
+            results = await CommentEntity.findAndCountAll({include: [GameEntity, UserEntity], limit, offset});
+        }
         const response = []
-        results.forEach(result => {
+        results.rows.forEach(result => {
             response.push(new CommentDto(result))
         })
-        return response;
+        return {countRows: results.count, ...response}
     }
     async get(id){
-        const response = await CommentEntity.findOne({where: {id}})
+        const response = await CommentEntity.findOne({where: {id},include: [GameEntity, UserEntity]})
         if(!response){
             throw new Error('Ошибка! Объект не найден!')
         }
         return response;
     }
 
-    async create(date, content, gameId, userId){
-        return await CommentEntity.create({date, content, gameId, userId});
-    }
-
-    async makeReview(title, rating, commentId){
-        await this.get(commentId);
-        return await ReviewEntity.create({title, rating, commentId});
+    async create(content, gameId, userId){
+        const response = await CommentEntity.create({content, gameId, userId}, {include: [GameEntity, UserEntity]})
+        return new CommentDto(response);
     }
 
     async update(id, content, isModerated, gameId, userId){

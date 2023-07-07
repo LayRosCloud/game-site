@@ -100,21 +100,23 @@ class UserController{
     }
 
     async update(req, res, next){
-        let {login, email, password, avatarImage, isBanned, roleId} = req.body
+        let {login, status, email, password, avatarImage, isBanned, roleId} = req.body
+
         const {id} = req.params
+        const {refreshToken} = req.cookies;
+
         if(!login || !email || !password || !isBanned || !roleId){
             return next(ApiError.badBody())
         }
         const {image} = req.files;
+
         if(image){
             avatarImage = uuid.v4 + '.jpg'
             await image.mv(path.resolve(__dirname, '..', 'static', avatarImage))
-
         }
-        const hashPassword = bcrypt.hash(password, 3)
 
         try{
-            return res.json(await service.update(id, login, email, hashPassword, avatarImage, isBanned, roleId))
+            return res.json(await service.update(id, login, status, email, password, avatarImage, isBanned, roleId,refreshToken))
         }
         catch (e){
             return next(ApiError.badRequest(e.message))
@@ -123,8 +125,9 @@ class UserController{
 
     async delete(req, res, next){
         const {id} = req.params
+        const {refreshToken} = req.cookies;
         try{
-            return res.json(await service.delete(id))
+            return res.json(await service.delete(id, refreshToken))
         }
         catch (e){
             return next(ApiError.badRequest(e.message))

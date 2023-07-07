@@ -15,9 +15,9 @@ class ReviewController{
         }
     }
     async create(req, res, next){
-        const {gameId, typeBlogId} = req.body
+        const {title, rating, commentId} = req.body
         try{
-            return res.json(await service.create(gameId, typeBlogId))
+            return res.json(await service.create(title, rating, commentId))
         }
         catch (e){
             return next(ApiError.badRequest(e.message))

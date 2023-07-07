@@ -1,23 +1,36 @@
-const {ContentGameEntity} = require('../core/models')
+const {ContentGameEntity, BlogEntity, TypeContentEntity} = require('../core/models')
 class ContentGameService{
-    async getAll(){
-        return await ContentGameEntity.findAll();
+    async getAll(blogId, typeContentId){
+        let results = []
+        if(!blogId && !typeContentId){
+            results = await ContentGameEntity.findAll({include: [BlogEntity, TypeContentEntity]})
+        }
+        else if(blogId && !typeContentId){
+            results = await ContentGameEntity.findAll({where: {blogId},include: [BlogEntity, TypeContentEntity]})
+        }
+        else if(!blogId && typeContentId){
+            results = await ContentGameEntity.findAll({where: {typeContentId}, include: [BlogEntity, TypeContentEntity]})
+        }
+        else if(blogId && typeContentId){
+            results = await ContentGameEntity.findAll({where: {blogId, typeContentId}, include: [BlogEntity, TypeContentEntity]})
+        }
+        return results;
     }
     async get(id){
-        const response = await ContentGameEntity.findOne({where: {id}})
+        const response = await ContentGameEntity.findOne({where: {id}, include: [BlogEntity, TypeContentEntity]})
         if(!response){
             throw new Error('Ошибка! Объект не найден!')
         }
         return response;
     }
 
-    async create(content, order, blogId, typeContentId){
-        return await ContentGameEntity.create({content, order, blogId, typeContentId});
+    async create(content, blogId, typeContentId){
+        return await ContentGameEntity.create({content, blogId, typeContentId}, {include: [BlogEntity, TypeContentEntity]});
     }
 
-    async update(id, content, order, blogId, typeContentId){
+    async update(id, content, blogId, typeContentId){
         await this.get(id)
-        await ContentGameEntity.update({content, order, blogId, typeContentId}, {where: {id}});
+        await ContentGameEntity.update({content, blogId, typeContentId}, {where: {id}});
         return await this.get(id);
     }
 

@@ -5,6 +5,7 @@ const tokenService = require('./token-service')
 const mailService = require('./mail-service')
 const bcrypt = require("bcrypt");
 const ApiError = require('../error/api-error')
+
 class UserService{
     async getAll(){
         const results = await UserEntity.findAll({include: RoleEntity})
@@ -35,13 +36,13 @@ class UserService{
         }
 
         const result = await UserEntity.create({login, email, password: hashPassword, activationLink, avatarImage, roleId});
-        const dto = new UserDto(result);
+        const dto = new UserDto(response);
 
         await mailService.sendActivationMail(email, `${process.env.DOMAIN_URL}api/v1/users/activate/${activationLink}`, login);
 
         const tokens = await tokenService.generateTokens(result)
 
-        return {...dto, ...tokens};
+        return {result, ...tokens};
     }
 
     async login(email, password){
@@ -74,16 +75,20 @@ class UserService{
         return token
     }
 
-    async update(id, login, email, password, avatarImage, isBanned, roleId){
+    async update(id, login, status, email, password, avatarImage, isBanned, roleId, refreshToken){
         await this.get(id)
-
+        const hashPassword = bcrypt.hash(password, 3)
         roleId = roleId || 1;
         avatarImage = avatarImage || null;
-
-        await UserEntity.update( {login, email, password, avatarImage, isBanned, roleId}, {where: {id}})
+        const data = await tokenService.validateRefreshToken(refreshToken)
+        if(data.id !== id && data.roleId !== 2){
+            throw new Error('Вы не можете изменить другого пользователя!')
+        }
+        await UserEntity.update( {login, status, email, password: hashPassword, avatarImage, isBanned, roleId}, {where: {id}})
         const response = await this.get(id)
         return response;
     }
+
     async refresh(refreshToken){
         if(!refreshToken) {
             throw ApiError.forbidden('Токен отсутствует')
@@ -100,8 +105,14 @@ class UserService{
         const tokens = await tokenService.generateTokens({...userDto})
         return {...userDto, ...tokens}
     }
-    async delete(id){
+
+    async delete(id, refreshToken){
         await this.get(id)
+
+        const data = await tokenService.validateRefreshToken(refreshToken)
+        if(data.id !== id){
+            throw new Error('Вы не можете удалить другого пользователя!')
+        }
         await UserEntity.destroy({where: {id}});
         return {status: 200, message: `Объект с id ${id} успешно удален!`}
     }

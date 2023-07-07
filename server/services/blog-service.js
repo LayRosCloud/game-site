@@ -1,7 +1,10 @@
-const {BlogEntity} = require('../core/models')
+const {BlogEntity, GameEntity, TypeBlogEntity} = require('../core/models')
 class BlogService{
-    async getAll(){
-        return await BlogEntity.findAll();
+    async getAll(gameId){
+        if(gameId){
+            return  await BlogEntity.findAll({include: [GameEntity, TypeBlogEntity], where: {gameId}})
+        }
+        return await BlogEntity.findAll({include: [GameEntity, TypeBlogEntity]});
     }
     async get(id){
         const response = await BlogEntity.findOne({where: {id}})

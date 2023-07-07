@@ -3,7 +3,7 @@ const ApiError = require("../error/api-error");
 const roleService = require('../services/role-service')
 
 module.exports = function (roles){
-    return  function (req, res, next){
+    return async function (req, res, next){
         try{
             const auth = req.headers.authorization;
             if(!auth){
@@ -15,7 +15,8 @@ module.exports = function (roles){
                 throw new Error('Ошибка! Пользователь не авторизован')
             }
             const role = tokenService.validateAccessToken(accessToken).roleId
-            let hasRole = roles.includes(role);
+            const fullRole = await roleService.get(role);
+            let hasRole = roles.includes(fullRole.name);
 
             if(hasRole === false){
                 throw new Error('Недостаточно прав')

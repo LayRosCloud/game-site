@@ -7,7 +7,7 @@ class TokenService{
             email: user.email,
             isBanned: user.isBanned,
             isActivated: user.isActivated, roleId: user.roleId},
-            process.env.ACCESS_KEY, {expiresIn: '30s'});
+            process.env.ACCESS_KEY, {expiresIn: '30m'});
         const refreshToken = jwt.sign({id: user.id,
             login: user.login,
             email: user.email,

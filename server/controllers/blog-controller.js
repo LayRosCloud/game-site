@@ -3,7 +3,9 @@ const ApiError = require('../error/api-error')
 
 class BlogController{
     async getAll(req, res){
-        return res.json(await service.getAll())
+        const {gameId} = req.query;
+        console.log(req.params)
+        return res.json(await service.getAll(gameId))
     }
 
     async get(req, res, next){

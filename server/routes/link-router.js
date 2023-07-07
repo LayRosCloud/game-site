@@ -1,11 +1,12 @@
 const Router = require('express');
 const router = new Router();
 const controller = require('../controllers/link-controller')
+const roleMiddleware = require("../middleware/role-middleware");
 
 router.get('/', controller.getAll)
 router.get('/:id', controller.get)
-router.post('/', controller.create)
-router.put('/:id', controller.update)
-router.delete('/:id', controller.delete)
+router.post('/', roleMiddleware(['developer', 'admin']), controller.create)
+router.put('/:id', roleMiddleware(['developer', 'admin']), controller.update)
+router.delete('/:id', roleMiddleware(['developer', 'admin']), controller.delete)
 
 module.exports = router;

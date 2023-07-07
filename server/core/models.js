@@ -15,38 +15,55 @@ const TypeReleaseEntity = require('./entities/type-release-entity')
 const TypeServiceEntity = require('./entities/type-service-entity')
 const UserEntity = require('./entities/user-entity')
 
-RoleEntity.hasMany(UserEntity);
+RoleEntity.hasMany(UserEntity, {onDelete: 'CASCADE', foreignKey: {allowNull: false}});
 UserEntity.belongsTo(RoleEntity);
 
-UserEntity.hasMany(TokenEntity);
+UserEntity.hasMany(TokenEntity, {onDelete: 'CASCADE', foreignKey: {allowNull: false}});
 TokenEntity.belongsTo(UserEntity);
 
-TypeReleaseEntity.hasMany(GameEntity);
+TypeReleaseEntity.hasMany(GameEntity, {onDelete: 'CASCADE', foreignKey: {allowNull: false}});
 GameEntity.belongsTo(TypeReleaseEntity);
 
-CommentEntity.hasOne(ReviewEntity);
+CommentEntity.hasOne(ReviewEntity, {onDelete: 'CASCADE', foreignKey: {allowNull: false}});
 ReviewEntity.belongsTo(CommentEntity);
 
-BlogEntity.hasMany(ContentGameEntity);
+BlogEntity.hasMany(ContentGameEntity, {onDelete: 'CASCADE', foreignKey: {allowNull: false}});
 ContentGameEntity.belongsTo(BlogEntity);
 
-TypeContentEntity.hasMany(ContentGameEntity);
+TypeContentEntity.hasMany(ContentGameEntity, {onDelete: 'CASCADE', foreignKey: {allowNull: false}});
 ContentGameEntity.belongsTo(TypeContentEntity);
 
-GameEntity.belongsToMany(TypeBlogEntity, {through: BlogEntity});
-TypeBlogEntity.belongsToMany(GameEntity, {through: BlogEntity});
+GameEntity.hasMany(BlogEntity, {onDelete: 'CASCADE', foreignKey: {allowNull: false}})
+BlogEntity.belongsTo(GameEntity);
 
-GameEntity.belongsToMany(GenreEntity, {through: GameGenreEntity});
-GenreEntity.belongsToMany(GameEntity, {through: GameGenreEntity});
+TypeBlogEntity.hasMany(BlogEntity, {onDelete: 'CASCADE', foreignKey: {allowNull: false}})
+BlogEntity.belongsTo(TypeBlogEntity);
 
-GameEntity.belongsToMany(UserEntity, {through: CommentEntity});
-UserEntity.belongsToMany(GameEntity, {through: CommentEntity});
+GameEntity.hasMany(GameGenreEntity, {onDelete: 'CASCADE', foreignKey: {allowNull: false}})
+GameGenreEntity.belongsTo(GameEntity);
 
-GameEntity.belongsToMany(TypeContentEntity, {through: PreviewEntity});
-TypeContentEntity.belongsToMany(GameEntity, {through: PreviewEntity});
+GenreEntity.hasMany(GameGenreEntity, {onDelete: 'CASCADE', foreignKey: {allowNull: false}})
+GameGenreEntity.belongsTo(GenreEntity);
 
-GameEntity.belongsToMany(TypeServiceEntity,{through:LinkEntity});
-TypeServiceEntity.belongsToMany(GameEntity,{through:LinkEntity});
+GameEntity.hasMany(CommentEntity, {onDelete: 'CASCADE', foreignKey: {allowNull: false}});
+CommentEntity.belongsTo(GameEntity);
+UserEntity.hasMany(CommentEntity, {onDelete: 'CASCADE', foreignKey: {allowNull: false}});
+CommentEntity.belongsTo(UserEntity);
+
+GameEntity.hasMany(PreviewEntity, {onDelete: 'CASCADE', foreignKey: {allowNull: false}});
+PreviewEntity.belongsTo(GameEntity);
+TypeContentEntity.hasMany(PreviewEntity, {onDelete: 'CASCADE', foreignKey: {allowNull: false}});
+PreviewEntity.belongsTo(TypeContentEntity);
+
+GameEntity.hasMany(LinkEntity, {onDelete: 'CASCADE', foreignKey: {allowNull: false}});
+LinkEntity.belongsTo(GameEntity);
+TypeServiceEntity.hasMany(LinkEntity, {onDelete: 'CASCADE', foreignKey: {allowNull: false}});
+LinkEntity.belongsTo(TypeServiceEntity);
+
+ReviewEntity.afterCreate('creatingReviewComment', async (review, options) => {
+    await CommentEntity.update({isReview: true}, {where: {id: review.commentId}})
+})
+
 
 module.exports = {
     BlogEntity,

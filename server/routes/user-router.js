@@ -2,12 +2,12 @@ const Router = require('express');
 const router = new Router();
 const controller = require('../controllers/user-controller')
 const { body } = require('express-validator')
-
-
-router.get('/', controller.getAll)
+const roleMiddleware = require("../middleware/role-middleware");
+const authMiddleware = require('../middleware/auth-middleware')
 
 //Все что связано с регистрацией
 router.post('/',
+    body('login').isLength({min: 4, max: 32}),
     body('email').isEmail(),
     body('password').isLength({min: 4, max: 32}),
     controller.create)
@@ -17,9 +17,12 @@ router.get('/refresh', controller.refresh)
 router.post('/login', controller.login)
 router.post('/logout', controller.logout)
 
-router.put('/:id', controller.update)
-router.delete('/:id', controller.delete)
-router.get('/:id', controller.get)
+// с редактированием профиля
+router.put('/:id', authMiddleware, controller.update)
+router.delete('/:id', authMiddleware, controller.delete)
+
+router.get('/', roleMiddleware(['admin']), controller.getAll)
+router.get('/:id', roleMiddleware(['admin']), controller.get)
 
 
 module.exports = router;

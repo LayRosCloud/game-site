@@ -9,6 +9,7 @@ const fileUpload = require('express-fileupload')
 const errorHandling = require('./middleware/error-handling')
 const path = require('path')
 const cookieParser = require('cookie-parser')
+const ReviewEntity = require("./core/entities/review-entity");
 
 const app = express();
 
@@ -26,6 +27,7 @@ const start = async () => {
     try {
         await sequelize.authenticate();
         await sequelize.sync();
+
         app.listen(PORT, ()=> console.log(`server listen on port ${PORT}`));
     } catch (e){
         console.log(e);

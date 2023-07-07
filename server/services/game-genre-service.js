@@ -1,7 +1,7 @@
-const {GameGenreEntity} = require('../core/models')
+const {GameGenreEntity, GameEntity, GenreEntity} = require('../core/models')
 class GameGenreService{
     async getAll(){
-        return await GameGenreEntity.findAll();
+        return await GameGenreEntity.findAll({include: [GameEntity, GenreEntity]});
     }
     async get(id){
         const response = await GameGenreEntity.findOne({where: {id}})

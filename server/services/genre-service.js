@@ -11,13 +11,13 @@ class GenreService{
         return response;
     }
 
-    async create(gameId, genreId){
-        return await GenreEntity.create({gameId, genreId});
+    async create(name){
+        return await GenreEntity.create({name});
     }
 
-    async update(id, gameId, genreId){
+    async update(id, name){
         await this.get(id)
-        await GenreEntity.update({gameId, genreId}, {where: {id}});
+        await GenreEntity.update({name}, {where: {id}});
         return await this.get(id);
     }
 

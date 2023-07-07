@@ -1,10 +1,10 @@
-const {LinkEntity} = require('../core/models')
+const {LinkEntity, GameEntity, TypeServiceEntity} = require('../core/models')
 class LinkService{
     async getAll(){
-        return await LinkEntity.findAll();
+        return await LinkEntity.findAll({include: [GameEntity, TypeServiceEntity]});
     }
     async get(id){
-        const response = await LinkEntity.findOne({where: {id}})
+        const response = await LinkEntity.findOne({where: {id}, include: [GameEntity, TypeServiceEntity]})
         if(!response){
             throw new Error('Ошибка! Объект не найден!')
         }

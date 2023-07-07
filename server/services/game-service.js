@@ -1,10 +1,10 @@
-const {GameEntity} = require('../core/models')
+const {GameEntity, TypeReleaseEntity} = require('../core/models')
 class GameService{
     async getAll(){
-        return await GameEntity.findAll();
+        return await GameEntity.findAll({include: TypeReleaseEntity});
     }
     async get(id){
-        const response = await GameEntity.findOne({where: {id}})
+        const response = await GameEntity.findOne({where: {id}, include: TypeReleaseEntity})
         if(!response){
             throw new Error('Ошибка! Объект не найден!')
         }
