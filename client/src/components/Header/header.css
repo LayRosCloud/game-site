@@ -1,0 +1,40 @@
+:root{
+    --header-color: #1B1B1B;
+}
+
+header{
+    height: 85px;
+    background: var(--header-color);
+}
+.content__container{
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.content__container.header{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+.logo h1{
+    background: none;
+    cursor: pointer;
+    border-radius: 5px;
+    padding: 5px 15px;
+    transition: 0.3s;
+}
+
+.logo h1:hover{
+    background: #BE65C0;
+}
+.enter__button{
+    background: #fff;
+    padding: 5px;
+    color: #1B1B1B;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.enter__button:hover{
+    opacity: 0.8;
+}

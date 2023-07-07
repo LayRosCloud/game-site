@@ -36,13 +36,13 @@ class UserService{
         }
 
         const result = await UserEntity.create({login, email, password: hashPassword, activationLink, avatarImage, roleId});
-        const dto = new UserDto(response);
+        const dto = new UserDto(result);
 
         await mailService.sendActivationMail(email, `${process.env.DOMAIN_URL}api/v1/users/activate/${activationLink}`, login);
 
         const tokens = await tokenService.generateTokens(result)
 
-        return {result, ...tokens};
+        return {...dto, ...tokens};
     }
 
     async login(email, password){

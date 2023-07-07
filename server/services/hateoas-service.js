@@ -20,7 +20,6 @@ class HateoasService{
         add(process.env.URL_TYPE_RELEASES);
         add(process.env.URL_TYPE_CONTENTS);
         add(process.env.URL_USERS);
-        add(`${process.env.URL_USERS}/${process.env.URL_USERS_REG}`);
         add(`${process.env.URL_USERS}/${process.env.URL_USERS_LOGIN}`);
         add(`${process.env.URL_USERS}/${process.env.URL_USERS_REFRESH}`);
         add(process.env.URL_ROLES);
