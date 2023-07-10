@@ -1,0 +1,12 @@
+.inp{
+    border-radius: 5px;
+    border: none;
+    height: 40px;
+    padding: 10px;
+}
+.inp:focus{
+    outline: none;
+}
+.bad__input{
+    background: #d2bfbf;
+}

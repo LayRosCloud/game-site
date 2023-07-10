@@ -1,19 +1,23 @@
-import startPoint from './index'
 import axios from 'axios'
+import HashTable from "./HashTable";
 
 class UserController{
-    constructor() {
-        this.domain = `${startPoint.domain}${startPoint.points['users']}`;
-    }
 
     async getAll(){
-        return await axios.get(this.domain);
+        const domain = HashTable.getValue('users')
+        return await axios.get(domain);
     }
     async getOnId(id){
-        return await axios.get(this.domain, {params: id});
+        const domain = HashTable.getValue('users')
+        return await axios.get(domain, {params: id});
     }
 
     async registration(login, password, email){
+        const domain = HashTable.getValue('users')
+        return await axios.post(domain, {
+            login, email, password
+        })
+
     }
 }
 

@@ -1,0 +1,34 @@
+.item__container{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    padding: 15px 30px;
+    max-height: 175px;
+    border-radius: 20px;
+    cursor: pointer;
+    background: var(--header-color);
+    transition: 0.3s;
+}
+
+.item__container:hover{
+    opacity: 0.8;
+}
+
+.item__container__inner{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.item__header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.image{
+    width: 250px;
+    border-radius: 15px;
+    margin-right: 15px;
+}

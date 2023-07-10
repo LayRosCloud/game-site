@@ -1,10 +1,11 @@
 import React from 'react';
+import classes from './DefaultButton.module.css'
 
-const DefaultButton = () => {
+const DefaultButton = ({children, ...props}) => {
     return (
-        <div>
-            
-        </div>
+        <button className={classes.btn} {...props}>
+            {children}
+        </button>
     );
 };
 

@@ -1,0 +1,36 @@
+.auth__container{
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    max-width: 600px;
+    margin: 15px auto;
+    align-content: center;
+    background: var(--header-color);
+    border-radius: 15px;
+}
+
+.auth__container h1{
+    margin-bottom: 20px;
+}
+
+.auth__container input{
+    margin-bottom: 10px;
+}
+
+.inputs__container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.link{
+    color: var(--accent-color);
+    text-decoration: none;
+    padding: 5px 15px;
+    transition: 0.1s;
+}
+
+.link:hover{
+    color: var(--foreground-color);
+    background: var(--accent-color);
+}

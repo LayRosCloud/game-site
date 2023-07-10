@@ -10,6 +10,6 @@
     opacity: 0.7;
 }
 .active__button{
-    color: #BE65C0;
-    border-bottom: 3px solid #BE65C0;
+    color: var(--accent-color);
+    border-bottom: 3px solid var(--accent-color);
 }

@@ -21,8 +21,8 @@ class MailService{
             text: '',
             html:
                 `
-                <div style="justify-content: center; max-width: 1000px;  margin: 0 auto; padding: 15px; background: #e3e3e3; border-radius: 20px;">
-                    <div style="max-width: 800px; display: flex; flex-direction: column; margin: 0 auto; background: #fff; border-radius: 20px; padding: 15px;">
+                <div style="justify-content: center; display: inline-block; padding: 15px; background: #e3e3e3; border-radius: 20px;">
+                    <div style="max-width: 800px; display: inline-block; margin: 0 auto; background: #fff; border-radius: 20px; padding: 15px;">
                         <h1 style="text-align: center; font-size: 30px; font-weight: bold; margin: 0;">Leafall</h1>
                         <h3 style="text-align: center;">Активация аккаунта</h3>
                         <p style="text-align: center; font-size: 30px;">Здравствуйте, <strong>${login}</strong>!👋</p>
