@@ -3,14 +3,24 @@ import {Link} from "react-router-dom";
 import DefaultButton from "../../../components/UI/Buttons/DefaultButton/DefaultButton";
 import '../Auth.css'
 import AuthInput from "../../../components/UI/Inputs/AuthInput/AuthInput";
+import userController from "../../../api/user-controller";
 
 
 const LoginPage = () => {
     const [user, setUser] = useState({email: '', password: ''})
     const [errors, setErrors] = useState({email: false, password: false})
 
-    function enterProfile(){
-
+    async function enterProfile(){
+        if(errors.password || errors.email){
+            return alert('Ошибка неправильный формат почты или пароля')
+        }
+        try{
+            const response = await userController.login(user.email, user.password)
+            console.log(response)
+        }
+        catch (e){
+            alert(e)
+        }
     }
 
     return (
@@ -25,6 +35,7 @@ const LoginPage = () => {
                 setValue={(e)=>setUser({...user, email: e})}/>
             <AuthInput type='password'
                        regex={/^(.{4,32})$/i}
+                       tooltip='Неправильный формат пароля'
                        placeholder='Введите пароль...'
                        value={user.password}
                        setBad={(bad)=>setErrors({...errors, password: bad})}

@@ -17,8 +17,16 @@ class UserController{
         return await axios.post(domain, {
             login, email, password
         })
-
     }
+
+    async login(email, password){
+        const domain = HashTable.getValue('users-login')
+        return await axios.post(domain, {
+            email, password
+        })
+    }
+
+
 }
 
 export default new UserController()

@@ -3,10 +3,16 @@
     border: none;
     height: 40px;
     padding: 10px;
+    width: 100%;
 }
 .inp:focus{
     outline: none;
 }
 .bad__input{
     background: #d2bfbf;
+}
+
+.tooltip{
+    color: #d2bfbf;
+    margin-bottom: 5px;
 }

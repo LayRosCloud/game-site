@@ -11,11 +11,14 @@ const AuthInput = ({value, setValue, regex, tooltip, setBad, ...props}) => {
     }
 
     return (
-        <input className={badInput? `${classes.inp} ${classes.bad__input}`: classes.inp} type='text'
-               value={value}
-               onChange={(e) => InputSymbol(e.target.value)}
-               title={badInput ? tooltip : ''}
-               {...props}/>
+        <div>
+            {badInput ? <p className={classes.tooltip}>{tooltip}</p> : '' }
+            <input className={badInput? `${classes.inp} ${classes.bad__input}`: classes.inp} type='text'
+                   value={value}
+                   onChange={(e) => InputSymbol(e.target.value)}
+                   {...props}/>
+        </div>
+
     );
 };
 

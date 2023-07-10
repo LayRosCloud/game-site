@@ -51,8 +51,8 @@ class UserService{
             throw new Error("Пользователь с таким email не существует")
         }
         const isPasswordEquals = await bcrypt.compare(password, response.password)
-        if(!isPasswordEquals){
-            return new Error('Неверный пароль')
+        if(isPasswordEquals === false){
+            throw new Error('Неверный пароль')
         }
         const userDto = new UserDto(response);
         const tokens = await tokenService.generateTokens({...userDto})

@@ -1,4 +1,3 @@
-import index from './index'
 class HashTable{
     static #collection = [];
 
