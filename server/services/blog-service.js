@@ -1,26 +1,55 @@
 const {BlogEntity, GameEntity, TypeBlogEntity} = require('../core/models')
 class BlogService{
-    async getAll(gameId){
-        if(gameId){
-            return  await BlogEntity.findAll({include: [GameEntity, TypeBlogEntity], where: {gameId}})
+    async getAll(gameId, typeBlogId, limit , page){
+        limit = limit || 9
+        page = page || 1
+        const offset = limit * page - limit;
+        limit = limit + 0
+
+        if(gameId && !typeBlogId){
+            return  await BlogEntity.findAll({
+                include: [GameEntity, TypeBlogEntity],
+                where: {gameId}, limit, offset})
         }
-        return await BlogEntity.findAll({include: [GameEntity, TypeBlogEntity]});
+        else if(!gameId && typeBlogId){
+            return  await BlogEntity.findAll({
+                include: [GameEntity, TypeBlogEntity],
+                where: {typeBlogId}, limit, offset})
+        }
+        else if(gameId && typeBlogId){
+            return  await BlogEntity.findAll({
+                include: [GameEntity, TypeBlogEntity],
+                where: {gameId, typeBlogId}, limit, offset})
+        }
+
+        return await BlogEntity.findAll({
+            include: [GameEntity, TypeBlogEntity], limit, offset});
     }
     async get(id){
-        const response = await BlogEntity.findOne({where: {id}})
+        const response = await BlogEntity.findOne(
+            {
+                where: {id}
+            })
+
         if(!response){
             throw new Error('Ошибка! Объект не найден!')
         }
+
         return response;
     }
-
-    async create(gameId, typeBlogId){
-        return await BlogEntity.create({gameId, typeBlogId});
+    async create(title,description,preview,gameId, typeBlogId){
+        return await BlogEntity.create({
+            title,
+            description,
+            preview,
+            gameId,
+            typeBlogId});
     }
-
-    async update(id, gameId, typeBlogId){
+    async update(id,title,description,preview, gameId, typeBlogId){
         await this.get(id)
-        await BlogEntity.update({gameId, typeBlogId}, {where: {id}})
+        await BlogEntity.update(
+            {title, description, preview, gameId, typeBlogId},
+            {where: {id}})
         return await this.get(id);
     }
 

@@ -17,7 +17,8 @@ class CommentsService{
         results.rows.forEach(result => {
             response.push(new CommentDto(result))
         })
-        return {countRows: results.count, ...response}
+
+        return results
     }
     async get(id){
         const response = await CommentEntity.findOne({where: {id},include: [GameEntity, UserEntity]})

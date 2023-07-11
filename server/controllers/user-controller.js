@@ -4,6 +4,7 @@ const uuid = require('uuid')
 const path = require('path')
 const bcrypt = require("bcrypt");
 const {validationResult} = require('express-validator')
+const saveImage = require("../scripts/save-image");
 
 class UserController{
     async getAll(req, res){
@@ -36,13 +37,13 @@ class UserController{
 
             if(req.files){
                 const { image } = req.files
-                avatarImage = uuid.v4 + '.jpg'
-                await image.mv(path.resolve(__dirname, '..', 'static', avatarImage))
-
+                avatarImage = await saveImage(image, 'avatars')
             }
 
             const userData = await service.create(login, email, password, avatarImage, 1);
+
             res.cookie('refreshToken', userData.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true})
+
             return res.json(userData)
         }
         catch (e){

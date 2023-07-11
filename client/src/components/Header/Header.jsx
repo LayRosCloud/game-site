@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import './header.css'
 import NavButton from "../UI/Buttons/NavButton/NavButton";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 
 const Header = () => {
     const [activities, setActivities] = useState([false, false, false])
@@ -20,11 +20,15 @@ const Header = () => {
     return (
         <header>
             <div className='content__container header'>
+
                 <div className='logo'>
-                    <h1>
-                        leafall
-                    </h1>
+                    <Link className='header__link' to='/'>
+                        <h1>
+                            leafall
+                        </h1>
+                    </Link>
                 </div>
+
                 <div className='buttons__container'>
                     <NavButton isActive={activities[0]}
                                onClick={()=> {activeButton(0); navigate('/news')}}>

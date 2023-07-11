@@ -9,7 +9,6 @@ const fileUpload = require('express-fileupload')
 const errorHandling = require('./middleware/error-handling')
 const path = require('path')
 const cookieParser = require('cookie-parser')
-const ReviewEntity = require("./core/entities/review-entity");
 
 const app = express();
 
@@ -37,5 +36,5 @@ const start = async () => {
 start();
 
 setInterval(async ()=>{
-    await sequelize.query("DELETE FROM `tokens` WHERE DATE_SUB(`createdAt`, INTERVAL 30 DAY)  < NOW()")
+    await sequelize.query("DELETE FROM `tokens` WHERE DATE_SUB(`updatedAt`, INTERVAL 30 DAY)  < NOW()")
 }, 1000 * 60 * 60 * 24 )

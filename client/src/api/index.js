@@ -1,16 +1,30 @@
 import axios from 'axios'
 import HashTable from './HashTable'
-class StartPoint{
-    static domain = 'http://localhost:5000'
 
-    static async start(){
-        const hrefPoint = this.domain + '/api/'
-        const hrefs = await axios.get(hrefPoint)
+const API_URL = 'http://localhost:5000'
 
-        hrefs.data.map(href => {
-            HashTable.addToCollection(href.rel, `${this.domain}${href.href}`)
+const $api = axios.create({
+    withCredentials: true,
+    baseURL: API_URL
+})
+
+$api.interceptors.request.use((config)=>{
+    config.headers.Authorization = `Bearer ${localStorage.getItem('token')}`
+})
+
+$api.interceptors.response.use((config)=>{
+    return config
+}, (error) => {
+    throw error
+})
+
+export function start(){
+    const hrefPoint = API_URL + '/api/'
+    axios.get(hrefPoint).then(links => {
+        links.data.map(link => {
+            HashTable.addToCollection(link.rel, `${API_URL}${link.href}`)
         })
-
-    }
+    })
 }
-export default StartPoint
+
+export default $api

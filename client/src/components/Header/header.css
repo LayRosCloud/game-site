@@ -2,6 +2,7 @@ header{
     height: 85px;
     background: var(--header-color);
 }
+
 .content__container{
     max-width: 1200px;
     margin: 0 auto;
@@ -13,6 +14,7 @@ header{
     justify-content: space-between;
     align-items: center;
 }
+
 .logo h1{
     background: none;
     cursor: pointer;
@@ -24,6 +26,7 @@ header{
 .logo h1:hover{
     background: var(--accent-color);
 }
+
 .enter__button{
     background: var(--foreground-color);
     padding: 5px;
@@ -31,6 +34,11 @@ header{
     cursor: pointer;
     transition: 0.3s;
 }
+
 .enter__button:hover{
     opacity: 0.8;
+}
+
+.header__link{
+    text-decoration: none;
 }

@@ -17,16 +17,17 @@ class GameController{
         }
     }
     async create(req, res, next){
-        const {title, description, developer, publisher, typeReleaseId} = req.body
+        const {title,description,preview, developer, publisher, typeReleaseId} = req.body
         const { sourceFile } = req.files
-        if(!title || !description|| !developer|| !publisher|| !typeReleaseId){
+        if(!developer|| !publisher|| !typeReleaseId){
             return next(ApiError.badBody())
         }
-        const urlDownload = uuid.v4() + '.zip';
-        await sourceFile.mv(path.resolve(__dirname, '..', 'static', urlDownload))
 
         try{
-            return res.json(await service.create(title, description, developer, publisher, urlDownload, typeReleaseId))
+            const urlDownload = uuid.v4() + '.zip';
+            await sourceFile.mv(path.resolve(__dirname, '..', 'static', urlDownload))
+
+            return res.json(await service.create(title, description, preview, developer, publisher, urlDownload, typeReleaseId))
         }
         catch (e){
             return next(ApiError.badRequest(e.message))
@@ -34,8 +35,8 @@ class GameController{
     }
 
     async update(req, res, next){
-        let {title, description, developer, urlDownload, publisher, typeReleaseId} = req.body
-        if(!title || !description|| !developer|| !urlDownload || !publisher|| !typeReleaseId){
+        let {title, description, preview, developer, urlDownload, publisher, typeReleaseId} = req.body
+        if(!developer|| !urlDownload || !publisher|| !typeReleaseId){
             return next(ApiError.badBody())
         }
 
@@ -48,6 +49,7 @@ class GameController{
 
         const {id} = req.params
         try{
+
             return res.json(await service.update(id, title, description, developer, publisher, urlDownload, typeReleaseId))
         }
         catch (e){

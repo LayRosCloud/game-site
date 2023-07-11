@@ -1,13 +1,15 @@
 const service = require('../services/blog-service')
 const ApiError = require('../error/api-error')
+const path = require("path");
+const uuid = require('uuid')
+const saveImage = require('../scripts/save-image')
 
 class BlogController{
     async getAll(req, res){
-        const {gameId} = req.query;
-        console.log(req.params)
-        return res.json(await service.getAll(gameId))
+        const {gameId, typeBlogId, limit, page} = req.query;
+        
+        return res.json(await service.getAll(gameId, typeBlogId, Number(limit), Number(page)))
     }
-
     async get(req, res, next){
         const {id} = req.params
         try{
@@ -19,12 +21,16 @@ class BlogController{
     }
 
     async create(req, res, next){
-        const {gameId, typeBlogId} = req.body;
-        if(gameId || typeBlogId){
+        const {title, description, gameId, typeBlogId} = req.body;
+        if(!title || !description || !gameId || !typeBlogId){
             return next(ApiError.badBody())
         }
         try{
-            return res.json(await service.create(gameId, typeBlogId))
+            const {previewImg} = req.files;
+
+            const preview = await saveImage(previewImg, 'previews')
+
+            return res.json(await service.create(title, description, gameId, typeBlogId))
         }
         catch (e){
             return next(ApiError.badRequest(e.message))
@@ -32,14 +38,14 @@ class BlogController{
     }
 
     async update(req, res, next){
-        const {gameId, typeBlogId} = req.body
+        const {title, description, preview, gameId, typeBlogId} = req.body
         const {id} = req.params
         if(!gameId || typeBlogId){
             return next(ApiError.badBody())
         }
 
         try{
-            return res.json(await service.update(id, gameId, typeBlogId))
+            return res.json(await service.update(id,title,description,preview, gameId, typeBlogId))
         }
         catch (e){
             return next(ApiError.badRequest(e.message))
