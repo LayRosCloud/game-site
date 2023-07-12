@@ -17,7 +17,7 @@ class GameController{
         }
     }
     async create(req, res, next){
-        const {title,description,preview, developer, publisher, typeReleaseId} = req.body
+        const {title,description, preview, developer, publisher, typeReleaseId} = req.body
         const { sourceFile } = req.files
         if(!developer|| !publisher|| !typeReleaseId){
             return next(ApiError.badBody())
@@ -48,14 +48,15 @@ class GameController{
         }
 
         const {id} = req.params
-        try{
 
+        try{
             return res.json(await service.update(id, title, description, developer, publisher, urlDownload, typeReleaseId))
         }
         catch (e){
             return next(ApiError.badRequest(e.message))
         }
     }
+
     async delete(req, res, next){
         const {id} = req.params
         try{

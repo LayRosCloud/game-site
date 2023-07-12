@@ -4,9 +4,9 @@ import NewsItem from "../../Items/NewsItem/NewsItem";
 const ListNews = ({list}) => {
     return (
         <div>
-            {list.map(obj => {
-                <NewsItem />
-            })}
+            {list.map(objectList=>
+                <NewsItem key={objectList.id} obj={objectList}/>
+            )}
         </div>
     );
 };

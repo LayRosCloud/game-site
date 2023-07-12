@@ -8,6 +8,7 @@
     cursor: pointer;
     background: var(--header-color);
     transition: 0.3s;
+    margin-bottom: 10px;
 }
 
 .item__container:hover{

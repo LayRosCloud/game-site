@@ -7,22 +7,22 @@ class BlogService{
         limit = limit + 0
 
         if(gameId && !typeBlogId){
-            return  await BlogEntity.findAll({
+            return  await BlogEntity.findAndCountAll({
                 include: [GameEntity, TypeBlogEntity],
                 where: {gameId}, limit, offset})
         }
         else if(!gameId && typeBlogId){
-            return  await BlogEntity.findAll({
+            return  await BlogEntity.findAndCountAll({
                 include: [GameEntity, TypeBlogEntity],
                 where: {typeBlogId}, limit, offset})
         }
         else if(gameId && typeBlogId){
-            return  await BlogEntity.findAll({
+            return  await BlogEntity.findAndCountAll({
                 include: [GameEntity, TypeBlogEntity],
                 where: {gameId, typeBlogId}, limit, offset})
         }
 
-        return await BlogEntity.findAll({
+        return await BlogEntity.findAndCountAll({
             include: [GameEntity, TypeBlogEntity], limit, offset});
     }
     async get(id){

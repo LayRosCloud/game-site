@@ -7,8 +7,9 @@ const saveImage = require('../scripts/save-image')
 class BlogController{
     async getAll(req, res){
         const {gameId, typeBlogId, limit, page} = req.query;
-        
-        return res.json(await service.getAll(gameId, typeBlogId, Number(limit), Number(page)))
+        const response = await service.getAll(gameId, typeBlogId, Number(limit), Number(page));
+        res.setHeader('x-total-count', response.count)
+        return res.json(response.rows)
     }
     async get(req, res, next){
         const {id} = req.params

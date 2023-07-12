@@ -6,10 +6,9 @@ import './app.css'
 import {Route, Routes} from "react-router-dom";
 import {routes} from "./routes/routes";
 import NotFoundPage from "./pages/NotFound/NotFoundPage";
-import userController from "./api/user-controller";
 function App() {
     useEffect(  ()=> {
-        start()
+        console.log('app work')
     },[])
 
   return (

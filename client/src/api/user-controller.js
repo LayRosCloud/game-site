@@ -1,4 +1,3 @@
-import axios from 'axios'
 import HashTable from "./HashTable";
 import $api from "./index";
 

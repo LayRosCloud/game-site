@@ -12,12 +12,6 @@ $api.interceptors.request.use((config)=>{
     config.headers.Authorization = `Bearer ${localStorage.getItem('token')}`
 })
 
-$api.interceptors.response.use((config)=>{
-    return config
-}, (error) => {
-    throw error
-})
-
 export function start(){
     const hrefPoint = API_URL + '/api/'
     axios.get(hrefPoint).then(links => {
