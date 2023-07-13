@@ -2,9 +2,16 @@ const service = require('../services/user-service')
 const ApiError = require('../error/api-error')
 const uuid = require('uuid')
 const path = require('path')
-const bcrypt = require("bcrypt");
 const {validationResult} = require('express-validator')
 const saveImage = require("../scripts/save-image");
+
+const refreshTokenCookie = 'refreshToken'
+const formatImage = '.jpg'
+const maxAgeCookie = 30 * 24 * 60 * 60 * 1000;
+const httpOnlyCookie = true
+const folderAvatars = 'avatars'
+const folderAllFiles = 'static'
+const backFolder = '..'
 
 class UserController{
     async getAll(req, res){
@@ -23,11 +30,13 @@ class UserController{
     
     async create(req, res, next){
         const {login, email, password} = req.body
+
         if(!login || !email || !password){
             return next(ApiError.badBody());
         }
 
         const errors = validationResult(req);
+
         if(!errors.isEmpty()){
             return next(new ApiError(400, "Ошибка! Почта или пароль имели неверный формат"))
         }
@@ -37,12 +46,12 @@ class UserController{
 
             if(req.files){
                 const { image } = req.files
-                avatarImage = await saveImage(image, 'avatars')
+                avatarImage = await saveImage(image, folderAvatars)
             }
 
             const userData = await service.create(login, email, password, avatarImage, 1);
 
-            res.cookie('refreshToken', userData.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true})
+            res.cookie(refreshTokenCookie, userData.refreshToken, {maxAge: maxAgeCookie, httpOnly: httpOnlyCookie})
 
             return res.json(userData)
         }
@@ -58,7 +67,9 @@ class UserController{
         }
         try{
             const response = await service.login(email, password)
-            res.cookie('refreshToken', response.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true})
+
+            res.cookie(refreshTokenCookie, response.refreshToken, {maxAge: maxAgeCookie, httpOnly: httpOnlyCookie})
+
             return res.json(response);
         } catch (e){
             return next(ApiError.badRequest(e.message))
@@ -67,10 +78,11 @@ class UserController{
 
     async refresh(req, res, next){
         try{
-
             const {refreshToken} = req.cookies;
             const userData = await service.refresh(refreshToken)
-            res.cookie('refreshToken', userData.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true})
+
+            res.cookie(refreshTokenCookie, userData.refreshToken, {maxAge: maxAgeCookie, httpOnly: httpOnlyCookie})
+
             return res.json(userData)
 
         }
@@ -83,7 +95,7 @@ class UserController{
         try{
             const {refreshToken} = req.cookies;
             const token = await service.logout(refreshToken);
-            res.clearCookie('refreshToken')
+            res.clearCookie(refreshTokenCookie)
             return res.json(token)
         }catch (e){
             return next(ApiError.badRequest(e.message))
@@ -109,14 +121,15 @@ class UserController{
         if(!login || !email || !password || !isBanned || !roleId){
             return next(ApiError.badBody())
         }
-        const {image} = req.files;
-
-        if(image){
-            avatarImage = uuid.v4 + '.jpg'
-            await image.mv(path.resolve(__dirname, '..', 'static', avatarImage))
-        }
 
         try{
+            const {image} = req.files;
+
+            if(image){
+                avatarImage = uuid.v4 + formatImage
+                await image.mv(path.resolve(__dirname, backFolder, folderAllFiles, avatarImage))
+            }
+
             return res.json(await service.update(id, login, status, email, password, avatarImage, isBanned, roleId,refreshToken))
         }
         catch (e){

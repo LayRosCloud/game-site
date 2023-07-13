@@ -48,8 +48,6 @@ class TokenService{
     }
     validateRefreshToken(token){
         try{
-            console.log(token)
-
             const userData = jwt.verify(token, process.env.REFRESH_KEY);
             return userData;
         }
@@ -59,7 +57,7 @@ class TokenService{
     }
 
     async findToken(refreshToken){
-        const userData = await TokenEntity.findOne({where: {refreshToken: refreshToken.replace('\n', '')}});
+        const userData = await TokenEntity.findOne({where: {refreshToken}});
         return userData;
     }
 }

@@ -96,6 +96,9 @@ class UserService{
 
         const userData = tokenService.validateRefreshToken(refreshToken)
         const tokenFromDb = await tokenService.findToken(refreshToken)
+
+        console.log(`${userData} ${tokenFromDb}`)
+
         if(!userData || !tokenFromDb){
             throw ApiError.forbidden('Пользователь не авторизован')
         }

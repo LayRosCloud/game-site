@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import blogController from "../../api/blog-controller";
 import ListNews from "../../components/Lists/ListNews/ListNews";
-import HashTable from "../../api/HashTable";
 
 const News = () => {
     const [news,setNews] = useState([])

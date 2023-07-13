@@ -17,12 +17,15 @@ const RegistrationPage = () => {
         if(user.password !== user.passwordRepeat){
             return alert('Ошибка! Пароли не совпадают')
         }
-        const response = await userController.registration(user.login, user.password, user.email)
-        if(response.status === 400){
-            return alert(response.data.message)
+        try {
+
+            await userController.registration(user.login, user.password, user.email)
+            setSuccessful(true)
+        }
+        catch (e){
+            alert(e.message)
         }
 
-        setSuccessful(true)
     }
 
     if(successful){

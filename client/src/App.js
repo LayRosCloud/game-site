@@ -1,5 +1,3 @@
-import {useEffect} from "react";
-import {start} from './api/index'
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
 import './app.css'
@@ -7,10 +5,6 @@ import {Route, Routes} from "react-router-dom";
 import {routes} from "./routes/routes";
 import NotFoundPage from "./pages/NotFound/NotFoundPage";
 function App() {
-    useEffect(  ()=> {
-        console.log('app work')
-    },[])
-
   return (
     <div className="App">
         <Header/>

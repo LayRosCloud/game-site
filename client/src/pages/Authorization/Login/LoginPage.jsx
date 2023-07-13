@@ -1,14 +1,18 @@
 import React, {useState} from 'react';
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import DefaultButton from "../../../components/UI/Buttons/DefaultButton/DefaultButton";
 import '../Auth.css'
 import AuthInput from "../../../components/UI/Inputs/AuthInput/AuthInput";
 import userController from "../../../api/user-controller";
+import {useDispatch} from "react-redux";
 
 
 const LoginPage = () => {
     const [user, setUser] = useState({email: '', password: ''})
     const [errors, setErrors] = useState({email: false, password: false})
+
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     async function enterProfile(){
         if(errors.password || errors.email){
@@ -16,7 +20,11 @@ const LoginPage = () => {
         }
         try{
             const response = await userController.login(user.email, user.password)
-            console.log(response)
+            dispatch({type: 'SET_USER', payload: response.data})
+            localStorage.setItem('token', response.data.accessToken)
+            localStorage.setItem('isAuth', 'true')
+            localStorage.setItem('id', response.data.id)
+            navigate('/')
         }
         catch (e){
             alert(e)
