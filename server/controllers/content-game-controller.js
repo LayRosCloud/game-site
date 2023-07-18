@@ -4,7 +4,8 @@ const uuid = require('uuid')
 const path = require('path')
 class GameContentController{
     async getAll(req, res){
-        return res.json(await service.getAll())
+        const {blogId, typeContentId} = req.query;
+        return res.json(await service.getAll(blogId, typeContentId))
     }
 
     async get(req, res, next){

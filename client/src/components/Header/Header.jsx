@@ -3,12 +3,17 @@ import './header.css'
 import NavButton from "../UI/Buttons/NavButton/NavButton";
 import {Link, useNavigate} from "react-router-dom";
 import userController from "../../api/user-controller";
+import {useDispatch, useStore} from "react-redux";
 
 const Header = () => {
     const [activities, setActivities] = useState([false, false, false])
     const navigate = useNavigate();
 
-    const [isAuth, setIsAuth] = useState(Boolean(localStorage.getItem('isAuth')) || false)
+    const dispatch = useDispatch()
+    const store = useStore()
+    const state = store.getState()
+
+    const isAuth = state.isAuth
 
     function activeButton(index) {
 
@@ -25,7 +30,7 @@ const Header = () => {
     async function logout(){
         try{
             await userController.logout();
-            setIsAuth(false)
+            dispatch()
         }catch (e){
             alert(e)
         }

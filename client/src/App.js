@@ -4,7 +4,12 @@ import './app.css'
 import {Route, Routes} from "react-router-dom";
 import {routes} from "./routes/routes";
 import NotFoundPage from "./pages/NotFound/NotFoundPage";
+import {useDispatch} from "react-redux";
 function App() {
+    const dispatch = useDispatch();
+    const auth = localStorage.getItem('isAuth') || false;
+    dispatch(auth ? {type: 'AUTH'} : {type: 'EXIT_AUTH'})
+
   return (
     <div className="App">
         <Header/>

@@ -2,7 +2,11 @@ const {createStore} = require("redux");
 
 const defaultState = {
     isAuth: false,
-    user: {}
+    user: {},
+    news: false,
+    about: false,
+    store: false,
+
 }
 
 const reducer = (state = defaultState, action) =>{
@@ -15,6 +19,12 @@ const reducer = (state = defaultState, action) =>{
             return {...state, user: action.payload}
         case "DELETE_USER":
             return {...state, user: {}}
+        case "SET_NEWS":
+            return {state, news: action.payload}
+        case "SET_ABOUT":
+            return {state, about: action.payload}
+        case "SET_STORE":
+            return {state, store: action.payload}
         default:
             return state;
     }

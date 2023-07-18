@@ -28,7 +28,8 @@ class BlogService{
     async get(id){
         const response = await BlogEntity.findOne(
             {
-                where: {id}
+                where: {id},
+                include: [GameEntity, TypeBlogEntity]
             })
 
         if(!response){

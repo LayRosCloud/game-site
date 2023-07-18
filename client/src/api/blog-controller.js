@@ -29,10 +29,8 @@ class BlogController {
 
     }
     async getById(id){
-        const domain = HashTable.getValue('blogs');
-        return $api.get(domain, {
-            params: id
-        });
+        const domain = `${HashTable.getValue('blogs')}${id}`;
+        return await $api.get(domain);
     }
 }
 export default new BlogController()
