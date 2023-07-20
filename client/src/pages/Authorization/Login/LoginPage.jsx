@@ -18,6 +18,7 @@ const LoginPage = () => {
         if(errors.password || errors.email){
             return alert('Ошибка неправильный формат почты или пароля')
         }
+
         try{
             const response = await userController.login(user.email, user.password)
             dispatch({type: 'SET_USER', payload: response.data})

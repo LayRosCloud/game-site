@@ -2,17 +2,18 @@ const {ContentGameEntity, BlogEntity, TypeContentEntity} = require('../core/mode
 class ContentGameService{
     async getAll(blogId, typeContentId){
         let results = []
+        const includeModels = [BlogEntity, TypeContentEntity]
         if(!blogId && !typeContentId){
-            results = await ContentGameEntity.findAll({include: [BlogEntity, TypeContentEntity]})
+            results = await ContentGameEntity.findAll({include: includeModels})
         }
         else if(blogId && !typeContentId){
-            results = await ContentGameEntity.findAll({where: {blogId},include: [BlogEntity, TypeContentEntity]})
+            results = await ContentGameEntity.findAll({where: {blogId},include: includeModels})
         }
         else if(!blogId && typeContentId){
-            results = await ContentGameEntity.findAll({where: {typeContentId}, include: [BlogEntity, TypeContentEntity]})
+            results = await ContentGameEntity.findAll({where: {typeContentId}, include: includeModels})
         }
         else if(blogId && typeContentId){
-            results = await ContentGameEntity.findAll({where: {blogId, typeContentId}, include: [BlogEntity, TypeContentEntity]})
+            results = await ContentGameEntity.findAll({where: {blogId, typeContentId}, include: includeModels})
         }
         return results;
     }

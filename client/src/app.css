@@ -12,11 +12,12 @@ h1,h2,h3,h4,h5,h6,div,p,button{
     --header-color: #1B1B1B;
     --accent-color: #BE65C0;
     --foreground-color: #FFF;
+    --max-width: 1200px
 }
 body{
     background: var(--body-color);
 }
 main{
-    max-width: 1200px;
+    max-width: var(--max-width);
     margin: 0 auto;
 }

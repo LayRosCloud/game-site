@@ -7,8 +7,8 @@ class GameController {
         return await $api.get(domain)
     }
     async getById(id){
-        const domain = HashTable.getValue('games');
-        return await $api.get(domain, {params: id})
+        const domain = `${HashTable.getValue('games')}${id}`;
+        return await $api.get(domain)
     }
 }
 

@@ -1,13 +1,14 @@
 import React, {useState} from 'react';
-import '../Auth.css'
 import {Link} from "react-router-dom";
 import DefaultButton from "../../../components/UI/Buttons/DefaultButton/DefaultButton";
 import AuthInput from "../../../components/UI/Inputs/AuthInput/AuthInput";
 import userController from "../../../api/user-controller";
+import '../Auth.css'
 
 const RegistrationPage = () => {
     const [user, setUser] = useState({login: '',email: '', password: '', passwordRepeat: ''})
     const [errors, setErrors] = useState({lError: true, eError: true, pError: true, prError: true})
+
     const [successful, setSuccessful]=  useState(false)
 
     async function Register(){

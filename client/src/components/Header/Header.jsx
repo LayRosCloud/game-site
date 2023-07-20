@@ -1,72 +1,77 @@
 import React, {useState} from 'react';
-import './header.css'
-import NavButton from "../UI/Buttons/NavButton/NavButton";
 import {Link, useNavigate} from "react-router-dom";
+import {useStore} from "react-redux";
+import NavButton from "../UI/Buttons/NavButton/NavButton";
 import userController from "../../api/user-controller";
-import {useDispatch, useStore} from "react-redux";
+import './header.css'
 
 const Header = () => {
     const [activities, setActivities] = useState([false, false, false])
     const navigate = useNavigate();
 
-    const dispatch = useDispatch()
     const store = useStore()
     const state = store.getState()
 
     const isAuth = state.isAuth
 
-    function activeButton(index) {
+    const navigationId = {news: 0, store: 1, about: 2, disable: -1}
+    const navigationPaths = {main: '/', news: '/news', store: '/store', about: '/about', login: '/login'}
 
-        let activityList = []
-        for (let i = 0; i < 3; i++){
-            activityList.push(false)
-        }
-        if(index !== -1){
-            activityList[index] = true;
-        }
+    function clickNavigate(index, path){
+        activeButton(index);
+        navigate(path)
+    }
+
+    function activeButton(activeId) {
+        const states = {active: true, disable: false}
+
+        let activityList = [states.disable, states.disable, states.disable]
+
+        if(activeId !== navigationId.disable)
+            activityList[activeId] = states.active;
+
         setActivities(activityList);
     }
 
     async function logout(){
         try{
             await userController.logout();
-            dispatch()
         }catch (e){
             alert(e)
         }
     }
+
+
 
     return (
         <header>
             <div className='content__container header'>
 
                 <div className='logo'>
-                    <Link className='header__link' to='/'>
-                        <h1>
-                            leafall
-                        </h1>
+                    <Link className='header__link' to={navigationPaths.main}>
+                        <img src={require('../assets/logo.png')} alt='Лого'/>
                     </Link>
                 </div>
 
                 <div className='buttons__container'>
                     <NavButton isActive={activities[0]}
-                               onClick={()=> {activeButton(0); navigate('/news')}}>
+                               onClick={()=> clickNavigate(navigationId.news, navigationPaths.news)}>
                         Новости
                     </NavButton>
 
                     <NavButton isActive={activities[1]}
-                               onClick={()=> {activeButton(1); navigate('/store')}}>
+                               onClick={()=> clickNavigate(navigationId.store, navigationPaths.store)}>
                         Магазин
                     </NavButton>
 
                     <NavButton isActive={activities[2]}
-                               onClick={()=> {activeButton(2); navigate('/about')}}>
+                               onClick={()=> clickNavigate(navigationId.about, navigationPaths.about)}>
                         О нас
                     </NavButton>
                     {isAuth
-                        ? <button onClick={()=>logout()} className='enter__button'>Вы вошли</button>
+                        ? <button onClick={()=> logout()} className='enter__button'>Вы вошли</button>
                         : <button className='enter__button'
-                                  onClick={()=> {activeButton(-1); navigate('/login')}}>
+                                  onClick={()=> {clickNavigate(navigationId.disable, navigationPaths.login)}}>
                             Мой профиль
                         </button>}
 

@@ -52,8 +52,6 @@ CommentEntity.belongsTo(UserEntity);
 
 GameEntity.hasMany(PreviewEntity, {onDelete: 'CASCADE', foreignKey: {allowNull: false}});
 PreviewEntity.belongsTo(GameEntity);
-TypeContentEntity.hasMany(PreviewEntity, {onDelete: 'CASCADE', foreignKey: {allowNull: false}});
-PreviewEntity.belongsTo(TypeContentEntity);
 
 GameEntity.hasMany(LinkEntity, {onDelete: 'CASCADE', foreignKey: {allowNull: false}});
 LinkEntity.belongsTo(GameEntity);
@@ -63,7 +61,6 @@ LinkEntity.belongsTo(TypeServiceEntity);
 ReviewEntity.afterCreate('creatingReviewComment', async (review, options) => {
     await CommentEntity.update({isReview: true}, {where: {id: review.commentId}})
 })
-
 
 module.exports = {
     BlogEntity,

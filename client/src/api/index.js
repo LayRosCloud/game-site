@@ -1,5 +1,7 @@
 import axios from 'axios'
 import HashTable from './HashTable'
+import {routes} from "../routes/routes";
+import {redirect} from "react-router-dom";
 
 const API_URL = 'http://localhost:5000'
 
@@ -15,9 +17,7 @@ $api.interceptors.request.use((config)=>{
 $api.interceptors.response.use((config)=>{
     return config;
 }, (error) => {
-    if(error.status === 401){
-
-    }
+    return Promise.reject(error.response.data);
 })
 
 export function start(){

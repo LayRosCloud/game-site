@@ -4,7 +4,7 @@ header{
 }
 
 .content__container{
-    max-width: 1200px;
+    max-width: var(--max-width);
     margin: 0 auto;
 }
 
@@ -41,4 +41,7 @@ header{
 
 .header__link{
     text-decoration: none;
+}
+.logo img{
+    width: 200px;
 }

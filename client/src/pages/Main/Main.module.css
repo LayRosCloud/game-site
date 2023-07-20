@@ -1,0 +1,7 @@
+.caption{
+    margin-top: 40px;
+}
+.container{
+    display: flex;
+    flex-direction: column;
+}

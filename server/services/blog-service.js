@@ -3,27 +3,35 @@ class BlogService{
     async getAll(gameId, typeBlogId, limit , page){
         limit = limit || 9
         page = page || 1
+
         const offset = limit * page - limit;
-        limit = limit + 0
+
+        limit = Number(limit)
+
+        const orderParameter = [['createdAt', 'DESC']];
 
         if(gameId && !typeBlogId){
             return  await BlogEntity.findAndCountAll({
                 include: [GameEntity, TypeBlogEntity],
-                where: {gameId}, limit, offset})
+                where: {gameId}, limit, offset,
+                order: orderParameter})
         }
         else if(!gameId && typeBlogId){
             return  await BlogEntity.findAndCountAll({
                 include: [GameEntity, TypeBlogEntity],
-                where: {typeBlogId}, limit, offset})
+                where: {typeBlogId}, limit, offset,
+                order: orderParameter})
         }
         else if(gameId && typeBlogId){
             return  await BlogEntity.findAndCountAll({
                 include: [GameEntity, TypeBlogEntity],
-                where: {gameId, typeBlogId}, limit, offset})
+                where: {gameId, typeBlogId}, limit, offset,
+                order: orderParameter})
         }
 
         return await BlogEntity.findAndCountAll({
-            include: [GameEntity, TypeBlogEntity], limit, offset});
+            include: [GameEntity, TypeBlogEntity], limit, offset,
+            order: orderParameter});
     }
     async get(id){
         const response = await BlogEntity.findOne(

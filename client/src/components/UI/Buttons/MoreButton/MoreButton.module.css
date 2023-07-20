@@ -1,0 +1,11 @@
+.btn{
+    text-decoration: none;
+    padding: 5px 15px;
+    background: var(--accent-color);
+    color: var(--foreground-color);
+    transition: 0.3s;
+    width: 130px;
+}
+.btn:hover{
+    opacity: 0.8;
+}

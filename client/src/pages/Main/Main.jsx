@@ -1,9 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import ListNews from "../../components/Lists/News/ListNews";
 import blogController from "../../api/blog-controller";
-import {Link} from "react-router-dom";
 import gameController from "../../api/game-controller";
-
+import ListGames from "../../components/Lists/Games/ListGames";
+import MoreButton from "../../components/UI/Buttons/MoreButton/MoreButton";
+import classes from "./Main.module.css";
 
 const Main = () => {
     const [news,setNews] = useState([])
@@ -23,13 +24,16 @@ const Main = () => {
     }
 
     return (
-        <div>
-            <h1>Последние новости</h1>
+        <div className={classes.container}>
+            <h1 className={classes.caption}>Последние новости</h1>
             <ListNews list={news}/>
-            <Link to='/news'>Подробнее</Link>
-            <h1>Последние релизы</h1>
+            <MoreButton to='/news'/>
 
-            <button onClick={()=> localStorage.clear()}>Удалить куки</button>
+            <h1 className={classes.caption}>Последние релизы</h1>
+            <ListGames games={games}/>
+            <MoreButton to='/store'/>
+
+            <button style={{marginLeft: 30}} onClick={()=> localStorage.clear()}>Удалить куки</button>
         </div>
     );
 };
