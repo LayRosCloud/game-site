@@ -16,7 +16,7 @@ const Main = () => {
 
 
     async function start(){
-        const responseBlogs = await blogController.getAll(3, 1);
+        const responseBlogs = await blogController.getAll(3, 1, 1);
         const responseGames = await gameController.getAll(3, 1);
 
         setNews(responseBlogs.data);

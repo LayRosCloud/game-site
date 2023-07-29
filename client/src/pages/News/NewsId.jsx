@@ -14,7 +14,6 @@ const NewsId = () => {
     })
     async function start(){
         try {
-
             const response = await blogController.getById(id);
             setBlogInfo(response.data)
             const responseMoreInfo = await contentGamesController.getAll(id, 1)

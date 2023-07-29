@@ -33,11 +33,11 @@ class UserController{
     }
 
     async logout(){
-        const domain = HashTable.getValue('users-logout')
-        await $api.post(domain);
         localStorage.removeItem('token')
         localStorage.removeItem('id')
         localStorage.removeItem('isAuth')
+        const domain = HashTable.getValue('users-logout')
+        await $api.post(domain);
     }
 
 

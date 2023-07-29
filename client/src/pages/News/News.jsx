@@ -10,7 +10,7 @@ const News = () => {
     },[])
 
     async function start(){
-        const response = await blogController.getAll(10, 1);
+        const response = await blogController.getAll(10, 1, 1);
         setNews(response.data)
     }
 

@@ -1,10 +1,10 @@
-const {PreviewEntity, GameEntity, TypeServiceEntity} = require('../core/models')
+const {PreviewEntity, GameEntity} = require('../core/models')
 class PreviewService{
     async getAll(){
-        return await PreviewEntity.findAll({ include: [GameEntity, TypeServiceEntity]});
+        return await PreviewEntity.findAll({ include: [GameEntity]});
     }
     async get(id){
-        const response = await PreviewEntity.findOne({where: {id}, include: [GameEntity, TypeServiceEntity]})
+        const response = await PreviewEntity.findOne({where: {id}, include: [GameEntity]})
         if(!response){
             throw new Error('Ошибка! Объект не найден!')
         }

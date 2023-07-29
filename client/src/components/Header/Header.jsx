@@ -37,7 +37,7 @@ const Header = () => {
         try{
             await userController.logout();
         }catch (e){
-            alert(e)
+            console.log(e)
         }
     }
 
