@@ -6,7 +6,6 @@ const defaultState = {
     news: false,
     about: false,
     store: false,
-
 }
 
 const reducer = (state = defaultState, action) =>{

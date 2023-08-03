@@ -8,12 +8,16 @@ import {useFetching} from "../../hooks/useFetching";
 import LoadingBar from "../../components/LoadingBar/LoadingBar";
 import contentGamesController from "../../api/content-games-controller";
 import blogController from "../../api/blog-controller";
+import CommentsList from "../../components/Lists/Comments/CommentsList";
+import commentsController from "../../api/comments-controller";
 
 const Game = () => {
     const id = useParams().id
     const [game, setGame] = useState({})
     const [previews, setPreviews] = useState([])
     const [contentGame, setContentGame] = useState([])
+    const [comments, setComments] = useState([])
+    const navigate = useNavigate()
 
     const [isLoadingGameData, fetchGameData] = useFetching(async () => {
         const gameData = await gameController.getById(id);
@@ -30,6 +34,11 @@ const Game = () => {
         setContentGame(responseContentGame.data);
     })
 
+    const [isLoadingComments, fetchComments] = useFetching(async () => {
+        const responseComments = await commentsController.getAll(9, 1, id);
+        setComments(responseComments.data)
+    })
+
     useEffect(()=>{
         console.log('вызов компонента Game')
         fetchData().then()
@@ -40,12 +49,13 @@ const Game = () => {
             await fetchGameData();
             await fetchPreview();
             await fetchContentGame();
-        }catch (e){
-            console.log(e)
+            await fetchComments()
+        } catch (e){
+            navigate('/error')
         }
     }
 
-    if(isLoadingGameData || isLoadingGameData || isLoadingPreview){
+    if(isLoadingGameData || isLoadingContentGame || isLoadingPreview || isLoadingComments){
         return (
             <LoadingBar/>
         )
@@ -57,6 +67,8 @@ const Game = () => {
             <PreviewsSlider list={previews}/>
             <p>{game.description}</p>
             <ContentGamesList list={contentGame}/>
+            <h1>Комментарии</h1>
+            <CommentsList list={comments} gameId={id}/>
         </div>
     );
 };

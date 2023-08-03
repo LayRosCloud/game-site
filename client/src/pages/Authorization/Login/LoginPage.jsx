@@ -21,20 +21,32 @@ const LoginPage = () => {
 
         try{
             const response = await userController.login(user.email, user.password)
-            dispatch({type: 'SET_USER', payload: response.data})
-            localStorage.setItem('token', response.data.accessToken)
-            localStorage.setItem('isAuth', 'true')
-            localStorage.setItem('id', response.data.id)
+
+            saveDataToRedux(response)
+            saveDataToCookie(response)
+
             navigate('/')
         }
         catch (e){
-            alert(e)
+            console.log(e)
         }
+    }
+
+    function saveDataToRedux(response){
+        dispatch({type: 'SET_USER', payload: response.data})
+        dispatch({type: 'AUTH'})
+    }
+
+    function saveDataToCookie(response){
+        localStorage.setItem('token', response.data.accessToken)
+        localStorage.setItem('isAuth', 'true')
+        localStorage.setItem('id', response.data.id)
     }
 
     return (
         <div className='auth__container'>
             <h1>Авторизация</h1>
+
             <AuthInput
                 regex={/^[\w.]+@([\w-]+\.)+[\w-]{2,4}$/g}
                 tooltip='Неправильный формат почты - example@example.com'
@@ -42,6 +54,7 @@ const LoginPage = () => {
                 value={user.email}
                 setBad={(bad)=>setErrors({...errors, email: bad})}
                 setValue={(e)=>setUser({...user, email: e})}/>
+
             <AuthInput type='password'
                        regex={/^(.{4,32})$/i}
                        tooltip='Неправильный формат пароля'
@@ -49,10 +62,12 @@ const LoginPage = () => {
                        value={user.password}
                        setBad={(bad)=>setErrors({...errors, password: bad})}
                        setValue={(e) => setUser({...user, password: e})}/>
+
             <div className='inputs__container'>
                 <Link className='link' to='/register'>У меня нет аккаунта</Link>
                 <DefaultButton onClick={enterProfile}>Войти</DefaultButton>
             </div>
+
         </div>
     );
 };

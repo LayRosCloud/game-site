@@ -8,7 +8,10 @@ import {useDispatch} from "react-redux";
 function App() {
     const dispatch = useDispatch();
     const auth = localStorage.getItem('isAuth') || false;
-    dispatch(auth ? {type: 'AUTH'} : {type: 'EXIT_AUTH'})
+
+    const authArray = [{type: 'AUTH'}, {type: 'EXIT_AUTH'}]
+
+    dispatch(auth ? authArray[0] : authArray[1])
 
   return (
     <div className="App">
