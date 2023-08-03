@@ -5,18 +5,36 @@ import NavButton from "../UI/Buttons/NavButton/NavButton";
 import userController from "../../api/user-controller";
 import './header.css'
 import Dropdown from "../UI/Dropdown/Dropdown";
+import DropDownItem from "../UI/Dropdown/DropdownItem/DropDownItem";
+import DefaultButton from "../UI/Buttons/DefaultButton/DefaultButton";
+import parseToJSON from "../../scripts/parserJWT";
 
 const Header = () => {
     const [activities, setActivities] = useState([false, false, false])
     const navigate = useNavigate();
-
+    const [nickname, setNickname] = useState('')
     const store = useStore()
-    const state = store.getState()
-
-    const isAuth = state.isAuth
 
     const navigationId = {news: 0, store: 1, about: 2, disable: -1}
     const navigationPaths = {main: '/', news: '/news', store: '/store', about: '/about', login: '/login'}
+
+    const dropDownElements = [
+        {icon: '😀', to: '/', title: 'профиль'},
+        {icon: '😀', to: '/', title: 'developer panel'},
+        {icon: '😀', to: '/', title: 'admin panel'},
+    ]
+
+    useEffect(()=>{
+        getData();
+    },[])
+
+    function getData(){
+        const token = localStorage.getItem('token');
+        if(token){
+            const data = parseToJSON(token)
+            setNickname(data.login);
+        }
+    }
 
     function clickNavigate(index, path){
         activeButton(index);
@@ -35,17 +53,22 @@ const Header = () => {
         setActivities(activityList);
     }
 
-
     async function logout(){
         try{
             await userController.logout();
+            store.dispatch({type: 'EXIT_AUTH'})
+            window.location.reload();
         }catch (e){
             console.log(e)
         }
     }
 
-    const profile = isAuth
-        ? <button onClick={()=> logout()} className='enter__button'>Вы вошли</button>
+    const profile = store.getState().isAuth
+        ? <Dropdown parent={<button className='enter__button'>{nickname}</button>}>
+            {dropDownElements.map(element =>
+                <DropDownItem key={element.title} to={element.to} icon={element.icon}>{element.title}</DropDownItem>)}
+            <DefaultButton className='logout__button' onClick={()=> logout()}>Выйти</DefaultButton>
+          </Dropdown>
         : <button className='enter__button'
                   onClick={()=> {clickNavigate(navigationId.disable, navigationPaths.login)}}>
             Мой профиль
@@ -76,7 +99,7 @@ const Header = () => {
                                onClick={()=> clickNavigate(navigationId.about, navigationPaths.about)}>
                         О нас
                     </NavButton>
-                    <Dropdown parent={<button className='enter__button'>ник</button>}/>
+                    {profile}
                 </div>
             </div>
         </header>

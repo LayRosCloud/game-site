@@ -28,6 +28,10 @@
       "react-app/jest"
     ]
   },
+  "browser": {
+    "crypto": false,
+    "stream": false
+  },
   "browserslist": {
     "production": [
       ">0.2%",
