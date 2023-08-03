@@ -1,9 +1,10 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Link, useNavigate} from "react-router-dom";
 import {useStore} from "react-redux";
 import NavButton from "../UI/Buttons/NavButton/NavButton";
 import userController from "../../api/user-controller";
 import './header.css'
+import Dropdown from "../UI/Dropdown/Dropdown";
 
 const Header = () => {
     const [activities, setActivities] = useState([false, false, false])
@@ -27,11 +28,13 @@ const Header = () => {
 
         let activityList = [states.disable, states.disable, states.disable]
 
-        if(activeId !== navigationId.disable)
+        if(activeId !== navigationId.disable){
             activityList[activeId] = states.active;
+        }
 
         setActivities(activityList);
     }
+
 
     async function logout(){
         try{
@@ -41,7 +44,12 @@ const Header = () => {
         }
     }
 
-
+    const profile = isAuth
+        ? <button onClick={()=> logout()} className='enter__button'>Вы вошли</button>
+        : <button className='enter__button'
+                  onClick={()=> {clickNavigate(navigationId.disable, navigationPaths.login)}}>
+            Мой профиль
+        </button>
 
     return (
         <header>
@@ -68,13 +76,7 @@ const Header = () => {
                                onClick={()=> clickNavigate(navigationId.about, navigationPaths.about)}>
                         О нас
                     </NavButton>
-                    {isAuth
-                        ? <button onClick={()=> logout()} className='enter__button'>Вы вошли</button>
-                        : <button className='enter__button'
-                                  onClick={()=> {clickNavigate(navigationId.disable, navigationPaths.login)}}>
-                            Мой профиль
-                        </button>}
-
+                    <Dropdown parent={<button className='enter__button'>ник</button>}/>
                 </div>
             </div>
         </header>
