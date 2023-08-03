@@ -5,10 +5,20 @@ import {useFetching} from "../../hooks/useFetching";
 import LoadingBar from "../../components/LoadingBar/LoadingBar";
 
 const News = () => {
-    const [news,setNews] = useState([])
+    const [news,setNews] = useState([]);
 
+    const [limit, setLimit] = useState(9);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [countPage, setCountPage] = useState(1);
+    
     const [isLoadingNews, fetchNews] = useFetching(async () => {
-        const response = await blogController.getAll(10, 1, 1);
+        const onlyNews = 1;
+
+        const response = await blogController.getAll(limit, currentPage, onlyNews);
+        console.log(response.headers)
+
+        //setCountPage(Math.ceil(countObjects / limit))
+        
         setNews(response.data)
     })
 

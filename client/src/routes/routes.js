@@ -7,9 +7,11 @@ import RegistrationPage from "../pages/Authorization/Registration/RegistrationPa
 import NewsId from "../pages/News/NewsId";
 import Game from "../pages/Store/Game";
 import NotFoundPage from "../pages/NotFound/NotFoundPage";
+import Profile from "../pages/Profile/Profile";
 
 export const routes = [
     {path: '/', component: Main },
+    {path: '/profile/:link', component: Profile },
     {path: '/news', component: News },
     {path: '/news/:id', component: NewsId },
     {path: '/store/:id', component: Game },

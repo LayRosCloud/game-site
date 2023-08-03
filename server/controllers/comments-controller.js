@@ -4,6 +4,7 @@ class CommentsController{
     async getAll(req, res){
         const response = await service.getAll();
         res.setHeader('x-total-count', response.count)
+        res.set('Access-Control-Expose-Headers', 'X-Total-Count')
         return res.json(response.rows)
     }
     async get(req, res, next){

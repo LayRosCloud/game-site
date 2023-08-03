@@ -18,6 +18,6 @@ module.exports = function (req, res, next){
         req.user = userData;
         next();
     } catch (e){
-        return next(ApiError.forbidden(e.message))
+        return next(ApiError.auth(e.message))
     }
 }

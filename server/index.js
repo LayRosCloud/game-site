@@ -20,7 +20,6 @@ app.use(cors({
 app.use(express.json());
 app.use(fileUpload({}));
 app.use(cookieParser())
-
 app.use(process.env.URL_START_POINT, router);
 app.use(express.static(path.resolve(__dirname, 'static')))
 

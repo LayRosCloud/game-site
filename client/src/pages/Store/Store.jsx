@@ -6,9 +6,12 @@ import LoadingBar from "../../components/LoadingBar/LoadingBar";
 
 const Store = () => {
     const [games, setGames] = useState([])
-
+    const [limit, setLimit] = useState(9);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [countPage, setCountPage] = useState(1);
     const [isLoadingGames, fetchGames] = useFetching(async () => {
-        const allGames = await gameController.getAll(9, 1)
+        const allGames = await gameController.getAll(limit, currentPage)
+        setCountPage(Math.ceil(allGames.headers['x-total-count'] / limit))
         setGames(allGames.data)
     })
 

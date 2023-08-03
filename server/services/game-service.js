@@ -1,8 +1,13 @@
 const {GameEntity, TypeReleaseEntity} = require('../core/models')
 class GameService{
-    async getAll(){
-        return await GameEntity.findAll({
-            include: TypeReleaseEntity
+    async getAll(limit, page){
+        limit = limit || 9;
+        page = page || 1;
+        const offset = limit * page - limit;
+        limit = Number(limit);
+        return await GameEntity.findAndCountAll({
+            include: TypeReleaseEntity,
+            limit, offset
         });
     }
     async get(id){

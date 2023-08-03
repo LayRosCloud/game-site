@@ -4,7 +4,13 @@ const uuid = require('uuid')
 const path = require('path')
 class GameController{
     async getAll(req, res){
-        return res.json(await service.getAll())
+        const {limit, page} = req.params;
+        const response = await service.getAll(limit, page)
+
+        res.set('x-total-count', response.count)
+        res.set('Access-Control-Expose-Headers', 'X-Total-Count')
+
+        return res.json(response.rows)
     }
 
     async get(req, res, next){

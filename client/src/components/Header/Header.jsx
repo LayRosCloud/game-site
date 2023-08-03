@@ -3,11 +3,11 @@ import {Link, useNavigate} from "react-router-dom";
 import {useStore} from "react-redux";
 import NavButton from "../UI/Buttons/NavButton/NavButton";
 import userController from "../../api/user-controller";
-import './header.css'
 import Dropdown from "../UI/Dropdown/Dropdown";
 import DropDownItem from "../UI/Dropdown/DropdownItem/DropDownItem";
 import DefaultButton from "../UI/Buttons/DefaultButton/DefaultButton";
 import parseToJSON from "../../scripts/parserJWT";
+import './header.css'
 
 const Header = () => {
     const [activities, setActivities] = useState([false, false, false])

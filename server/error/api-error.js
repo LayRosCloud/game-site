@@ -25,6 +25,9 @@ class ApiError extends Error{
     static forbidden(message){
         return new ApiError(statusErrors.forbidden, message)
     }
+    static auth(message){
+        return new ApiError(statusErrors.auth, message)
+    }
     static badBody(){
         return new ApiError(statusErrors.badBody, ERROR_MESSAGE_BAD_BODY)
     }

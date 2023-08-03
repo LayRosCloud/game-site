@@ -2,6 +2,7 @@ import axios from 'axios'
 import HashTable from './HashTable'
 import {routes} from "../routes/routes";
 import {redirect} from "react-router-dom";
+import userController from "./user-controller";
 
 const API_URL = 'http://localhost:5000'
 
@@ -14,10 +15,23 @@ $api.interceptors.request.use((config)=>{
     config.headers.Authorization = `Bearer ${token}`
     return config;
 })
+
 $api.interceptors.response.use((config)=>{
     return config;
-}, (error) => {
-    return Promise.reject(error.response.data);
+}, async (error) => {
+    const originalResponse = error.config
+    if(error.response.status === 401 && error.config && !error.config._isRetry){
+        error.config._isRetry = true;
+        try{
+            const response = await userController.refresh();
+            localStorage.setItem('token', response.data.accessToken)
+            return $api.request(originalResponse)
+        }catch (e){
+            console.log(e)
+        }
+    }
+
+    throw error;
 })
 
 export function start(){

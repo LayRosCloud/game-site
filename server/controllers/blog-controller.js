@@ -9,6 +9,7 @@ class BlogController{
         const {gameId, typeBlogId, limit, page} = req.query;
         const response = await service.getAll(gameId, typeBlogId, Number(limit), Number(page));
         res.setHeader('x-total-count', response.count)
+        res.set('Access-Control-Expose-Headers', 'X-Total-Count')
         return res.json(response.rows)
     }
     async get(req, res, next){

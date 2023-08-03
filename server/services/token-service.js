@@ -7,13 +7,13 @@ class TokenService{
             email: user.email,
             isBanned: user.isBanned,
             isActivated: user.isActivated, roleId: user.roleId},
-            process.env.ACCESS_KEY, {expiresIn: '30m'});
+            process.env.ACCESS_KEY, {expiresIn: '15s'});
         const refreshToken = jwt.sign({id: user.id,
             login: user.login,
             email: user.email,
             isBanned: user.isBanned,
             isActivated: user.isActivated,
-            roleId: user.roleId}, process.env.REFRESH_KEY, {expiresIn: '30d'});
+            roleId: user.roleId}, process.env.REFRESH_KEY, {expiresIn: '30s'});
         await this.saveToken(refreshToken, user.id)
         return {accessToken, refreshToken}
     }
