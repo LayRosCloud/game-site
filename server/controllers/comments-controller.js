@@ -2,9 +2,10 @@ const service = require('../services/comments-service')
 const ApiError = require('../error/api-error')
 class CommentsController{
     async getAll(req, res){
-        return res.json(await service.getAll())
+        const response = await service.getAll();
+        res.setHeader('x-total-count', response.count)
+        return res.json(response.rows)
     }
-
     async get(req, res, next){
         const {id} = req.params
         try{

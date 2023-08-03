@@ -7,7 +7,6 @@ const SearchEngine = ({value, setValue, foundedList}) => {
                 placeholder='Поиск...'
                 value={value}
                 onChange={(e) => setValue(e.target.value)}/>
-
         </div>
     );
 };

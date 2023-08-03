@@ -13,10 +13,6 @@ class CommentsService{
         else{
             results = await CommentEntity.findAndCountAll({include: [GameEntity, UserEntity], limit, offset});
         }
-        const response = []
-        results.rows.forEach(result => {
-            response.push(new CommentDto(result))
-        })
 
         return results
     }
