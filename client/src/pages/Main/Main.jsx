@@ -5,22 +5,36 @@ import gameController from "../../api/game-controller";
 import ListGames from "../../components/Lists/Games/ListGames";
 import MoreButton from "../../components/UI/Buttons/MoreButton/MoreButton";
 import classes from "./Main.module.css";
+import {useFetching} from "../../hooks/useFetching";
+import LoadingBar from "../../components/LoadingBar/LoadingBar";
 
 const Main = () => {
     const [news,setNews] = useState([])
     const [games, setGames] = useState([])
 
+    const [isLoadingBlogs, fetchBlogs] = useFetching(async () => {
+        const responseBlogs = await blogController.getAll(3, 1, 1);
+        setNews(responseBlogs.data);
+    })
+    const [isLoadingGame, fetchGames] = useFetching(async () => {
+        const responseGames = await gameController.getAll(3, 1);
+        setGames(responseGames.data);
+    })
+
     useEffect(()=>{
-        start().then(r => console.log('Data is successful'))
+        fetchData().then()
     },[])
 
 
-    async function start(){
-        const responseBlogs = await blogController.getAll(3, 1, 1);
-        const responseGames = await gameController.getAll(3, 1);
+    async function fetchData(){
+        await fetchBlogs();
+        await fetchGames();
+    }
 
-        setNews(responseBlogs.data);
-        setGames(responseGames.data);
+    if(isLoadingGame || isLoadingBlogs){
+        return (
+            <LoadingBar/>
+        )
     }
 
     return (

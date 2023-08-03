@@ -3,35 +3,54 @@ import {useNavigate, useParams} from "react-router-dom";
 import gameController from "../../api/game-controller";
 import previewsController from "../../api/previews-controller";
 import ContentGamesList from "../../components/Lists/ContentGames/ContentGamesList";
+import PreviewsSlider from "../../components/Lists/Previews/PreviewsSlider";
+import {useFetching} from "../../hooks/useFetching";
+import LoadingBar from "../../components/LoadingBar/LoadingBar";
 import contentGamesController from "../../api/content-games-controller";
 import blogController from "../../api/blog-controller";
-import PreviewsSlider from "../../components/Lists/Previews/PreviewsSlider";
 
 const Game = () => {
     const id = useParams().id
     const [game, setGame] = useState({})
     const [previews, setPreviews] = useState([])
     const [contentGame, setContentGame] = useState([])
-    const navigate = useNavigate()
 
-    useEffect(() => {
-        fetchGame();
+    const [isLoadingGameData, fetchGameData] = useFetching(async () => {
+        const gameData = await gameController.getById(id);
+        setGame(gameData.data);
     })
-    async function fetchGame(){
-        try{
-            const responseGame = await gameController.getById(id);
-            setGame(responseGame.data);
-            const responsePreviews = await previewsController.getAll();
-            setPreviews(responsePreviews.data);
-            const responseBlogs = await blogController.getAll(1, 1, 2, id);
-            const dataBlogs = responseBlogs.data;
-            const responseContentGame = await contentGamesController.getAll(dataBlogs[0].id);
-            setContentGame(responseContentGame.data);
-        }catch (e){
-            navigate('/error');
-        }
+    const [isLoadingPreview, fetchPreview] = useFetching(async () => {
+        const previews = await previewsController.getAll();
+        setPreviews(previews.data);
+    })
+    const [isLoadingContentGame, fetchContentGame] = useFetching(async () => {
+        const responseBlogs = await blogController.getAll(1, 1, 2, id);
+        const dataBlogs = responseBlogs.data;
+        const responseContentGame = await contentGamesController.getAll(dataBlogs[0].id);
+        setContentGame(responseContentGame.data);
+    })
 
+    useEffect(()=>{
+        console.log('вызов компонента Game')
+        fetchData().then()
+    }, [])
+
+    async function fetchData(){
+        try{
+            await fetchGameData();
+            await fetchPreview();
+            await fetchContentGame();
+        }catch (e){
+            console.log(e)
+        }
     }
+
+    if(isLoadingGameData || isLoadingGameData || isLoadingPreview){
+        return (
+            <LoadingBar/>
+        )
+    }
+
     return (
         <div>
             <h1>{game.title}</h1>

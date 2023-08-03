@@ -1,16 +1,16 @@
 import {useState} from "react";
 
 export const useFetching = (callback) => {
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const [error, setError]= useState('')
     const fetching = async () => {
-        setIsLoading(false);
+        setIsLoading(true);
         try{
             await callback();
         }catch (e){
             setError(e.getMessage())
         }
-        setIsLoading(true);
+        setIsLoading(false);
     }
     return [isLoading, fetching, error]
 }
