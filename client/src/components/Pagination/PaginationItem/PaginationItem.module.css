@@ -1,0 +1,8 @@
+.item{
+    padding: 5px;
+    background: var(--header-color);
+    cursor: pointer;
+}
+.item:hover{
+    opacity: 0.8;
+}

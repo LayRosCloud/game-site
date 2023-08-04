@@ -3,6 +3,7 @@ import blogController from "../../api/blog-controller";
 import ListNews from "../../components/Lists/News/ListNews";
 import {useFetching} from "../../hooks/useFetching";
 import LoadingBar from "../../components/LoadingBar/LoadingBar";
+import Pagination from "../../components/Pagination/Pagination";
 
 const News = () => {
     const [news,setNews] = useState([]);
@@ -15,9 +16,9 @@ const News = () => {
         const onlyNews = 1;
 
         const response = await blogController.getAll(limit, currentPage, onlyNews);
-        console.log(response.headers)
+        const totalCount = setCountPage(response.headers['X-Total-Count']);
 
-        //setCountPage(Math.ceil(countObjects / limit))
+        setCountPage(Math.ceil(totalCount / limit))
         
         setNews(response.data)
     })
@@ -31,11 +32,17 @@ const News = () => {
             <LoadingBar/>
         )
     }
+    if(news.length === 0){
+        return (
+            <h1>Новостей нет...</h1>
+        )
+    }
 
     return (
         <div>
             <h1>Новости</h1>
             <ListNews list={news}/>
+            <Pagination totalCount={countPage}/>
         </div>
     );
 };

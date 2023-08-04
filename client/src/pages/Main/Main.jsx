@@ -20,7 +20,9 @@ const Main = () => {
         const responseGames = await gameController.getAll(3, 1);
         setGames(responseGames.data);
     })
-
+    const about = 'Мы небольшая инди-команда, которая работает на энтузиазме. Этот сайт сделан лишь для того, чтобы' +
+        ' каждый разработчик смог разместить свой проект, а люди смогли его по достоинству оценить. При этом наша модерация ' +
+        'будет тщательно проверять все отзывы и комментарии, чтобы избежать некорректной критики со стороны пользователей'
     useEffect(()=>{
         fetchData().then()
     },[])
@@ -39,15 +41,24 @@ const Main = () => {
 
     return (
         <div className={classes.container}>
-            <h1 className={classes.caption}>Последние новости</h1>
-            <ListNews list={news}/>
-            <MoreButton to='/news'/>
+            <h1>Немного о нас</h1>
+            <p>{about}</p>
+            {games.length? <>
+                <h1 className={classes.caption}>Последние релизы</h1>
+                <ListGames games={games}/>
+                <MoreButton to='/store'/>
+            </>
+                : <h1>Релизов нет...</h1>}
 
-            <h1 className={classes.caption}>Последние релизы</h1>
-            <ListGames games={games}/>
-            <MoreButton to='/store'/>
+            { news.length
+                ?<>
+                    <h1 className={classes.caption}>Последние новости</h1>
+                    <ListNews list={news}/>
+                    <MoreButton to='/news'/>
+                </>
+                : <h1>Новостей нет...</h1>
+            }
 
-            <button style={{marginLeft: 30}} onClick={()=> localStorage.clear()}>Удалить куки</button>
         </div>
     );
 };
