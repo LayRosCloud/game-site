@@ -9,30 +9,33 @@ import DefaultButton from "../UI/Buttons/DefaultButton/DefaultButton";
 import parseToJSON from "../../scripts/parserJWT";
 import './header.css'
 
+const navigationPaths = {main: '/', news: '/news', store: '/store', about: '/about', login: '/login'}
+const navigationId = {news: 0, store: 1, about: 2, disable: -1}
+
 const Header = () => {
     const [activities, setActivities] = useState([false, false, false])
     const navigate = useNavigate();
     const [nickname, setNickname] = useState('')
     const store = useStore()
 
-    const navigationId = {news: 0, store: 1, about: 2, disable: -1}
-    const navigationPaths = {main: '/', news: '/news', store: '/store', about: '/about', login: '/login'}
-
-    const dropDownElements = [
-        {icon: '😀', to: '/', title: 'профиль'},
-        {icon: '😀', to: '/', title: 'developer panel'},
-        {icon: '😀', to: '/', title: 'admin panel'},
-    ]
+    const [data, setData] = useState({})
 
     useEffect(()=>{
         getData();
     },[])
+
+    const dropDownElements = [
+        {icon: '😀', to: `/profile/${data.link}`, title: 'профиль'},
+        {icon: '😀', to: '/developer/', title: 'developer panel'},
+        {icon: '😀', to: '/', title: 'admin panel'},
+    ]
 
     function getData(){
         const token = localStorage.getItem('token');
         if(token){
             const data = parseToJSON(token)
             setNickname(data.login);
+            setData(data)
         }
     }
 

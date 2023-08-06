@@ -19,9 +19,9 @@ class UserController{
     }
 
     async get(req, res, next){
-        const {id} = req.params
+        const {link} = req.params
         try{
-            return res.json(await service.get(id))
+            return res.json(await service.get(link))
         }
         catch (e){
             return next(ApiError.badRequest(e.message))

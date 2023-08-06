@@ -1,5 +1,6 @@
 const {UserEntity, RoleEntity} = require('../core/models')
 const UserDto = require('../core/dto/UserDto')
+const UserProfileDto = require('../core/dto/UserProfileDto')
 const uuid = require('uuid')
 const tokenService = require('./token-service')
 const mailService = require('./mail-service')
@@ -11,31 +12,34 @@ class UserService{
         const results = await UserEntity.findAll({include: RoleEntity})
         const response = [];
         results.map(result => {
-            response.push(new UserDto(result))
+            response.push(new UserProfileDto(result))
         })
         return response;
     }
 
-    async get(id){
-        const response = await UserEntity.findOne({where: {id}, include: RoleEntity})
+    async get(link){
+        const response = await UserEntity.findOne({where: {link}, include: RoleEntity})
         if(!response){
-            throw new Error('Ошибка! Объект не найден!')
+            throw new Error('Ошибка! Пользователь не найден!')
         }
-        return new UserDto(response);
+        return new UserProfileDto(response);
     }
 
     async create(login, email, password, avatarImage, roleId){
         roleId = roleId || 1;
-        const activationLink = uuid.v4();
-        const hashPassword = await bcrypt.hash(password, 3)
-
         const check = await UserEntity.findOne({where: {email}})
 
         if(check){
             throw new Error("Ошибка! Такой Email существует!")
         }
 
-        const result = await UserEntity.create({login, email, password: hashPassword, activationLink, avatarImage, roleId});
+        const activationLink = uuid.v4();
+        const link = uuid.v4();
+        const hashPassword = await bcrypt.hash(password, 3)
+
+        const name = email.split('@')[0]
+
+        const result = await UserEntity.create({login, email, password: hashPassword, activationLink, avatarImage, roleId, link, name});
         const dto = new UserDto(result);
 
         await mailService.sendActivationMail(email, `${process.env.DOMAIN_URL}api/v1/users/activate/${activationLink}`, login);
@@ -81,7 +85,7 @@ class UserService{
         roleId = roleId || 1;
         avatarImage = avatarImage || null;
         const data = await tokenService.validateRefreshToken(refreshToken)
-        if(data.id !== id && data.roleId !== 2){
+        if(data.id !== id || data.roleId !== 2){
             throw new Error('Вы не можете изменить другого пользователя!')
         }
         await UserEntity.update( {login, status, email, password: hashPassword, avatarImage, isBanned, roleId}, {where: {id}})

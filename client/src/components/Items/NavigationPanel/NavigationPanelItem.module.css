@@ -1,0 +1,9 @@
+.container{
+    display: flex;
+    flex: none;
+    cursor: pointer;
+    background: var(--body-color);
+    padding: 5px 15px;
+    border-radius: 10px;
+    margin-bottom: 5px;
+}

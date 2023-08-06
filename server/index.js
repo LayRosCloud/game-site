@@ -29,7 +29,6 @@ const start = async () => {
     try {
         await sequelize.authenticate();
         await sequelize.sync();
-
         app.listen(PORT, ()=> console.log(`server listen on port ${PORT}`));
     } catch (e){
         console.log(e);
@@ -39,5 +38,5 @@ const start = async () => {
 start();
 
 setInterval(async ()=>{
-    await sequelize.query("DELETE FROM `tokens` WHERE DATE_SUB(`updatedAt`, INTERVAL 30 DAY)  < NOW()")
+    await sequelize.query("DELETE FROM `tokens` WHERE DATE_SUB(`updatedAt`, INTERVAL 30 DAY) < NOW()")
 }, 1000 * 60 * 60 * 24 )

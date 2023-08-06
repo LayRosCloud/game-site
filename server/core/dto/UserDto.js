@@ -1,13 +1,9 @@
-module.exports = class UserDto{
+const UserProfileDto = require("./UserProfileDto");
+module.exports = class UserDto extends UserProfileDto{
     constructor(user) {
-        this.id = user.id;
+        super(user);
         this.login = user.login;
         this.email = user.email;
-        this.avatarImage = user.avatarImage;
-        this.dateRegistration = user.createdAt;
-        this.roleId = user.roleId;
         this.isActivated = user.isActivated;
-        this.isBanned = user.isBanned;
-        this.role = user.role
     }
 }

@@ -1,19 +1,12 @@
 const {TokenEntity} = require('../core/models')
 const jwt = require('jsonwebtoken')
+const UserDto = require("../core/dto/UserDto");
 class TokenService{
     async generateTokens(user){
-        const accessToken = jwt.sign({id: user.id,
-            login: user.login,
-            email: user.email,
-            isBanned: user.isBanned,
-            isActivated: user.isActivated, roleId: user.roleId},
+        const dto = new UserDto(user)
+        const accessToken = jwt.sign({...dto},
             process.env.ACCESS_KEY, {expiresIn: '30m'});
-        const refreshToken = jwt.sign({id: user.id,
-            login: user.login,
-            email: user.email,
-            isBanned: user.isBanned,
-            isActivated: user.isActivated,
-            roleId: user.roleId}, process.env.REFRESH_KEY, {expiresIn: '30d'});
+        const refreshToken = jwt.sign({...dto}, process.env.REFRESH_KEY, {expiresIn: '30d'});
         await this.saveToken(refreshToken, user.id)
         return {accessToken, refreshToken}
     }

@@ -8,9 +8,13 @@ import NewsId from "../pages/News/NewsId";
 import Game from "../pages/Store/Game";
 import NotFoundPage from "../pages/NotFound/NotFoundPage";
 import Profile from "../pages/Profile/Profile";
+import EditProfile from "../pages/Profile/EditProfile/EditProfile";
+import DeveloperPanel from "../pages/Admin/DeveloperPanel/DeveloperPanel";
 
 export const routes = [
     {path: '/', component: Main },
+    {path: '/profile/edit/:link', component: EditProfile },
+    {path: '/developer/*', component: DeveloperPanel },
     {path: '/profile/:link', component: Profile },
     {path: '/news', component: News },
     {path: '/news/:id', component: NewsId },
@@ -19,5 +23,6 @@ export const routes = [
     {path: '/about', component: About },
     {path: '/login', component: LoginPage },
     {path: '/register', component: RegistrationPage},
-    {path: '/error', component: NotFoundPage}
+    {path: '/error', component: NotFoundPage},
+    {path: '*', component: NotFoundPage}
 ]

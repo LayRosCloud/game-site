@@ -8,9 +8,9 @@ class UserController{
         return await $api.get(domain);
     }
 
-    async getById(id){
-        const domain = HashTable.getValue('users')
-        return await $api.get(domain, {params: id});
+    async getByLink(link){
+        const domain = `${HashTable.getValue('users')}${link}`
+        return await $api.get(domain);
     }
 
     async registration(login, password, email){

@@ -12,6 +12,7 @@ const RegistrationPage = () => {
     const [successful, setSuccessful]=  useState(false)
 
     async function Register(){
+        console.log(errors.eError || errors.lError || errors.pError || errors.prError)
         if(errors.eError || errors.lError || errors.pError || errors.prError){
             return alert('Ошибка! Неверные поля')
         }

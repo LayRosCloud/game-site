@@ -21,8 +21,8 @@ router.post('/logout', controller.logout)
 router.put('/:id', authMiddleware, controller.update)
 router.delete('/:id', authMiddleware, controller.delete)
 
-router.get('/', roleMiddleware(['admin']), controller.getAll)
-router.get('/:id', roleMiddleware(['admin']), controller.get)
+router.get('/', controller.getAll)
+router.get('/:link', controller.get)
 
 
 module.exports = router;
