@@ -27,7 +27,7 @@ const Header = () => {
     const dropDownElements = [
         {icon: '😀', to: `/profile/${data.link}`, title: 'профиль'},
         {icon: '😀', to: '/developer/', title: 'developer panel'},
-        {icon: '😀', to: '/', title: 'admin panel'},
+        {icon: '😀', to: '/admin/', title: 'admin panel'},
     ]
 
     function getData(){

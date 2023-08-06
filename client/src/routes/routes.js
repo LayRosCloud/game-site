@@ -10,11 +10,13 @@ import NotFoundPage from "../pages/NotFound/NotFoundPage";
 import Profile from "../pages/Profile/Profile";
 import EditProfile from "../pages/Profile/EditProfile/EditProfile";
 import DeveloperPanel from "../pages/Admin/DeveloperPanel/DeveloperPanel";
+import AdminPanel from "../pages/Admin/AdminPanel/AdminPanel";
 
 export const routes = [
     {path: '/', component: Main },
     {path: '/profile/edit/:link', component: EditProfile },
     {path: '/developer/*', component: DeveloperPanel },
+    {path: '/admin/*', component: AdminPanel },
     {path: '/profile/:link', component: Profile },
     {path: '/news', component: News },
     {path: '/news/:id', component: NewsId },
